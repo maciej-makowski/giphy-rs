@@ -1,0 +1,9 @@
+[package]
+name = "giphy-rs"
+version = "0.1.0"
+authors = ["Maciej Makowski <maciejm.github@cfiet.net>"]
+edition = "2018"
+
+[dependencies]
+serde_json = "1.0"
+tokio = "0.1"
