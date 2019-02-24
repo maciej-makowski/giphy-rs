@@ -1,8 +1,140 @@
+#[macro_use]
+extern crate serde_derive;
+
 extern crate reqwest;
 extern crate iso639_1;
 extern crate dotenv;
 
 pub mod v1 {
+    
+    mod model {
+        #[derive(Serialize, Deserialize)]
+        pub struct Meta {
+            pub msg: String,
+            pub status: i32,
+            pub response_id: String
+        }
+
+        #[derive(Serialize, Deserialize)]
+        pub struct Pagination {
+            pub count: i32,
+            pub total_count: i32,
+            pub offset: i32
+        }
+
+        #[derive(Serialize, Deserialize)]
+        pub struct User {
+            pub avatar_url: String,
+            pub banner_url: String,
+            pub profile_url: String,
+            pub username: String,
+            pub display_name: String,
+            pub twitter: String
+        }
+
+        #[derive(Serialize, Deserialize)]
+        pub struct ImageAnimated {
+            pub url: String,
+            pub width: String,
+            pub height: String,
+            pub size: String,
+            pub mp4: String,
+            pub mp4_size: String,
+            pub webp: String,
+            pub webp_size: String
+        }
+
+        #[derive(Serialize, Deserialize)]
+        pub struct ImageStill {
+            pub url: String,
+            pub width: String,
+            pub height: String
+        }
+
+        #[derive(Serialize, Deserialize)]
+        pub struct ImageDownsized {
+            pub url: String,
+            pub width: String,
+            pub height: String,
+            pub size: String
+        }
+
+        #[derive(Serialize, Deserialize)]
+        pub struct ImageLooping {
+            pub mp4: String
+        }
+
+        #[derive(Serialize, Deserialize)]
+        pub struct ImagePreviewMp4 {
+            pub mp4: String,
+            pub mp4_size: String,
+            pub width: String,
+            pub height: String
+        }
+
+        #[derive(Serialize, Deserialize)]
+        pub struct ImagePreviewGif {
+            pub url: String,
+            pub size: String,
+            pub width: String,
+            pub height: String
+        }
+
+        #[derive(Serialize, Deserialize)]
+        pub struct Images {
+            pub fixed_height: ImageAnimated,
+            pub fixed_height_still: ImageStill,
+            pub fixed_height_downsampled: ImageAnimated,
+            pub fixed_width: ImageAnimated,
+            pub fixed_width_still: ImageStill,
+            pub fixed_width_downsampled: ImageAnimated,
+            pub fixed_height_small: ImageAnimated,
+            pub fixed_height_small_still: ImageStill,
+            pub fixed_width_small: ImageAnimated,
+            pub fixed_width_small_still: ImageStill,
+            pub downsized: ImageDownsized,
+            pub downsized_still: ImageStill,
+            pub downsized_large: ImageDownsized,
+            pub downsized_medium: ImageDownsized,
+            pub downsized_small: ImageDownsized,
+            pub original: ImageAnimated,
+            pub original_still: ImageStill,
+            pub looping: ImageLooping,
+            pub preview: ImagePreviewMp4,
+            pub preview_gif: ImagePreviewGif
+        }
+
+        #[derive(Serialize, Deserialize)]
+        pub struct Gif {
+            #[serde(alias = "type")]
+            pub gif_type: String,
+            pub id: String,
+            pub slug: String,
+            pub url: String,
+            pub bitly_url: String,
+            pub embed_url: String,
+            pub username: String,
+            pub source: String,
+            pub rating: String,
+            pub user: User,
+            pub source_tld: String,
+            pub source_post_url: String,
+            pub update_datestamp: String,
+            pub create_datestamp: String,
+            pub import_datestamp: String,
+            pub trending_datetime: String,
+            pub images: Images,
+            pub title: String
+        }
+
+        #[derive(Serialize, Deserialize)]
+        pub struct SearchResponse {
+            pub data: Vec<Gif>,
+            pub pagination: Pagination,
+            pub meta: Meta
+        }
+    }
+
     use std::convert::From;
 
     pub static API_ROOT: &str = "https://api.giphy.com/v1/gifs";
@@ -63,18 +195,18 @@ pub mod v1 {
             }
         }
 
-        pub fn search(&self, req: &SearchRequest) -> Result<String, ApiError> {
+        pub fn search(&self, req: &SearchRequest) -> Result<model::SearchResponse, ApiError> {
             let endpoint = format!("{}/search/api_key={}&q={}", 
                                    self.url,
                                    self.key,
                                    req.query
             );
 
-            let response_text = reqwest::get(&endpoint)
+            let search_response: model::SearchResponse = reqwest::get(&endpoint)
                 .map_err(|e| ApiError::from(e))?
-                .text()?;
+                .json()?;
 
-            Ok(response_text)
+            Ok(search_response)
         }
     }
 
@@ -130,10 +262,10 @@ pub mod v1 {
             let api = Api::new(API_ROOT, &api_key);
 
             let req = SearchRequest::new("rage");
-            let response_text = api.search(&req)
+            let response = api.search(&req)
                 .unwrap();
 
-            assert!(response_text != "");
+            assert!(response.pagination.count > 0);
         }
     }
 }
