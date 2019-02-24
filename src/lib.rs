@@ -8,63 +8,55 @@ extern crate dotenv;
 pub mod v1 {
     
     mod model {
-        #[derive(Serialize, Deserialize)]
+        #[derive(Serialize, Deserialize, Debug)]
         pub struct Meta {
             pub msg: String,
             pub status: i32,
             pub response_id: String
         }
 
-        #[derive(Serialize, Deserialize)]
+        #[derive(Serialize, Deserialize, Debug)]
         pub struct Pagination {
             pub count: i32,
             pub total_count: i32,
             pub offset: i32
         }
 
-        #[derive(Serialize, Deserialize)]
+        #[derive(Serialize, Deserialize, Debug)]
         pub struct User {
             pub avatar_url: String,
             pub banner_url: String,
             pub profile_url: String,
             pub username: String,
             pub display_name: String,
-            pub twitter: String
+            pub twitter: Option<String>
         }
 
-        #[derive(Serialize, Deserialize)]
+        #[derive(Serialize, Deserialize, Debug)]
         pub struct ImageAnimated {
-            pub url: String,
+            pub url: Option<String>,
             pub width: String,
             pub height: String,
-            pub size: String,
-            pub mp4: String,
-            pub mp4_size: String,
-            pub webp: String,
-            pub webp_size: String
+            pub size: Option<String>,
+            pub mp4: Option<String>,
+            pub mp4_size: Option<String>,
+            pub webp: Option<String>,
+            pub webp_size: Option<String>
         }
 
-        #[derive(Serialize, Deserialize)]
+        #[derive(Serialize, Deserialize, Debug)]
         pub struct ImageStill {
             pub url: String,
             pub width: String,
             pub height: String
         }
 
-        #[derive(Serialize, Deserialize)]
-        pub struct ImageDownsized {
-            pub url: String,
-            pub width: String,
-            pub height: String,
-            pub size: String
-        }
-
-        #[derive(Serialize, Deserialize)]
+        #[derive(Serialize, Deserialize, Debug)]
         pub struct ImageLooping {
             pub mp4: String
         }
 
-        #[derive(Serialize, Deserialize)]
+        #[derive(Serialize, Deserialize, Debug)]
         pub struct ImagePreviewMp4 {
             pub mp4: String,
             pub mp4_size: String,
@@ -72,7 +64,7 @@ pub mod v1 {
             pub height: String
         }
 
-        #[derive(Serialize, Deserialize)]
+        #[derive(Serialize, Deserialize, Debug)]
         pub struct ImagePreviewGif {
             pub url: String,
             pub size: String,
@@ -80,7 +72,7 @@ pub mod v1 {
             pub height: String
         }
 
-        #[derive(Serialize, Deserialize)]
+        #[derive(Serialize, Deserialize, Debug)]
         pub struct Images {
             pub fixed_height: ImageAnimated,
             pub fixed_height_still: ImageStill,
@@ -92,11 +84,11 @@ pub mod v1 {
             pub fixed_height_small_still: ImageStill,
             pub fixed_width_small: ImageAnimated,
             pub fixed_width_small_still: ImageStill,
-            pub downsized: ImageDownsized,
+            pub downsized: ImageAnimated,
             pub downsized_still: ImageStill,
-            pub downsized_large: ImageDownsized,
-            pub downsized_medium: ImageDownsized,
-            pub downsized_small: ImageDownsized,
+            pub downsized_large: ImageAnimated,
+            pub downsized_medium: ImageAnimated,
+            pub downsized_small: ImageAnimated,
             pub original: ImageAnimated,
             pub original_still: ImageStill,
             pub looping: ImageLooping,
@@ -104,7 +96,7 @@ pub mod v1 {
             pub preview_gif: ImagePreviewGif
         }
 
-        #[derive(Serialize, Deserialize)]
+        #[derive(Serialize, Deserialize, Debug)]
         pub struct Gif {
             #[serde(alias = "type")]
             pub gif_type: String,
@@ -116,18 +108,18 @@ pub mod v1 {
             pub username: String,
             pub source: String,
             pub rating: String,
-            pub user: User,
+            pub user: Option<User>,
             pub source_tld: String,
             pub source_post_url: String,
-            pub update_datestamp: String,
-            pub create_datestamp: String,
-            pub import_datestamp: String,
-            pub trending_datetime: String,
+            pub update_datetime: Option<String>,
+            pub create_datetime: Option<String>,
+            pub import_datetime: Option<String>,
+            pub trending_datetime: Option<String>,
             pub images: Images,
             pub title: String
         }
 
-        #[derive(Serialize, Deserialize)]
+        #[derive(Serialize, Deserialize, Debug)]
         pub struct SearchResponse {
             pub data: Vec<Gif>,
             pub pagination: Pagination,
@@ -196,7 +188,7 @@ pub mod v1 {
         }
 
         pub fn search(&self, req: &SearchRequest) -> Result<model::SearchResponse, ApiError> {
-            let endpoint = format!("{}/search/api_key={}&q={}", 
+            let endpoint = format!("{}/search?api_key={}&q={}", 
                                    self.url,
                                    self.key,
                                    req.query
@@ -204,7 +196,7 @@ pub mod v1 {
 
             let search_response: model::SearchResponse = reqwest::get(&endpoint)
                 .map_err(|e| ApiError::from(e))?
-                .json()?;
+                .json::<model::SearchResponse>()?;
 
             Ok(search_response)
         }
