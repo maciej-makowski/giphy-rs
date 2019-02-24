@@ -70,6 +70,7 @@ impl Api {
 
         let search_response = reqwest::get(&endpoint)
             .map_err(|e| ApiError::from(e))?
+            .error_for_status()?
             .json::<SearchResponse>()?;
 
         Ok(search_response)
@@ -80,6 +81,7 @@ impl Api {
 mod test {
     use std::env;
     use dotenv::dotenv;
+    use mockito::{server_url, mock, Matcher);
 
     use super::*;
 
@@ -122,10 +124,16 @@ mod test {
     }
 
     #[test]
-    fn api_search_integration() {
+    fn api_search_200_ok() {
         dotenv().ok();
         let api_key = env::var("GIPHY_API_KEY_TEST").unwrap();
-        let api = Api::new(API_ROOT, &api_key);
+        let api_root = server_url();
+        let _m = mock("GET", Matcher::Regex(r"/search.*".to_string()))
+            .with_status(200)
+            .with_body_from_file("data/example-search-response.json")
+            .create();
+
+        let api = Api::new(&api_root, &api_key);
 
         let req = SearchRequest::new("rage");
         let response = api.search(&req)
