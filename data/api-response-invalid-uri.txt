@@ -1,0 +1,13 @@
+HTTP/2 401 
+content-type: application/json; charset=utf-8
+www-authenticate: Key realm="kong"
+accept-ranges: bytes
+accept-ranges: bytes
+accept-ranges: bytes
+accept-ranges: bytes
+date: Mon, 25 Feb 2019 08:24:21 GMT
+x-served-by: cache-bwi5145-BWI, cache-lhr6344-LHR
+x-cache-hits: 0, 0
+x-timer: S1551083061.438291,VS0,VE76
+
+{"message":"No API key found in request"}
