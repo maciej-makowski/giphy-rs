@@ -1,13 +1,21 @@
-HTTP/2 401 
-content-type: application/json; charset=utf-8
-www-authenticate: Key realm="kong"
+HTTP/2 404 
+content-type: application/json
+x-ratelimit-limit-hour: 42
+x-ratelimit-remaining-hour: 41
+x-ratelimit-limit-day: 1000
+x-ratelimit-remaining-day: 999
+x-robots-tag: noindex
+access-control-allow-credentials: true
+access-control-allow-methods: GET, POST, PUT, DELETE, OPTIONS
+access-control-allow-headers: Content-Type, Accept, x-requested-with, cache-control
+access-control-allow-origin: *
 accept-ranges: bytes
-accept-ranges: bytes
-accept-ranges: bytes
-accept-ranges: bytes
-date: Mon, 25 Feb 2019 08:24:21 GMT
-x-served-by: cache-bwi5145-BWI, cache-lhr6344-LHR
-x-cache-hits: 0, 0
-x-timer: S1551083061.438291,VS0,VE76
+date: Mon, 25 Feb 2019 08:30:20 GMT
+age: 25
+x-served-by: cache-bwi5147-BWI, cache-lhr6324-LHR
+x-cache-hits: 0, 1
+x-timer: S1551083420.461629,VS0,VE1
+vary: Accept-Encoding
+content-length: 92
 
-{"message":"No API key found in request"}
+{"data":[],"meta":{"status":404,"msg":"Not Found","response_id":"5c73a783514d66622e6e291e"}}

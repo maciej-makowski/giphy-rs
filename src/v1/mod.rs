@@ -130,7 +130,7 @@ mod test {
         let api_root = server_url();
         let _m = mock("GET", Matcher::Regex(r"/search.*".to_string()))
             .with_status(200)
-            .with_body_from_file("data/example-search-response.json")
+            .with_body_from_file("data/search-response-rage-200.json")
             .create();
 
         let api = Api::new(&api_root, &api_key);
