@@ -3,6 +3,8 @@ name = "giphy"
 version = "0.0.1"
 authors = ["Maciej Makowski <maciejm.github(at)cfiet.net>"]
 edition = "2018"
+license = "MIT"
+description = "HTTP API wrapper for Giphy"
 
 [dependencies]
 reqwest = "0.9.9"
