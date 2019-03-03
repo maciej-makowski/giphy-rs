@@ -81,7 +81,7 @@ impl Api {
 mod test {
     use std::env;
     use dotenv::dotenv;
-    use mockito::{server_url, mock, Matcher);
+    use mockito::{server_url, mock, Matcher};
 
     use super::*;
 
