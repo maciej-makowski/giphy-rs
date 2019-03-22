@@ -36,45 +36,8 @@ mod test {
     use dotenv::dotenv;
     use mockito::{server_url, mock, Matcher};
 
+    use crate::v1::SearchRequest;
     use super::*;
-
-    #[test]
-    fn search_request_new() {
-        let query = "test";
-        let req = SearchRequest::new(query);
-
-        assert_eq!(req.query, query);
-        assert_eq!(req.offset, None);
-        assert_eq!(req.limit, None);
-        assert_eq!(req.lang, None);
-    }
-
-    #[test]
-    fn search_request_offset() {
-        let offset = 10u32;
-        let mut req = SearchRequest::new("");
-        req.offset(offset);
-
-        assert_eq!(req.offset, Some(offset));
-    }
-
-    #[test]
-    fn search_request_limit() {
-        let limit = 10u32;
-        let mut req = SearchRequest::new("");
-        req.limit(limit);
-
-        assert_eq!(req.limit, Some(limit));
-    }
-
-    #[test]
-    fn search_request_lang() {
-        let lang = iso639_1::Iso639_1::En;
-        let mut req = SearchRequest::new("");
-        req.lang(&lang);
-
-        assert_eq!(req.lang, Some(lang));
-    }
 
     #[test]
     fn api_search_200_ok() {
