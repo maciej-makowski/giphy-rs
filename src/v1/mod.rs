@@ -1,6 +1,6 @@
-mod model;
-mod sync;
-mod asn;
+pub mod model;
+pub mod sync;
+pub mod asn;
 
 use std::convert::From;
 pub use model::*;
