@@ -33,6 +33,7 @@ mod test {
     use dotenv::dotenv;
     use mockito::{server_url, mock, Matcher};
     use super::*;
+    use tokio::runtime::current_thread;
 
     #[test]
     fn api_search_200_ok() {
@@ -48,11 +49,13 @@ mod test {
         let api = Api::new(api_root, api_key, client);
 
         let req = SearchRequest::new("rage");
-        let response = api.search(&req)
-            .wait()
-            .unwrap();
+        let test_fut = api.search(&req).map(|response| {
+            assert!(response.pagination.count > 0);
+        }).map_err(|err| 
+            panic!("{:?}", err)
+        );
 
-        assert!(response.pagination.count > 0);
+        current_thread::run(test_fut);
     }
 }
 
