@@ -1,4 +1,4 @@
-use super::{SearchRequest, SearchResponse};
+use super::model::{SearchRequest, SearchResponse};
 
 pub struct Api {
     _url: String,
