@@ -38,7 +38,8 @@ mod test {
     #[test]
     fn api_search_200_ok() {
         dotenv().ok();
-        let api_key = env::var("GIPHY_API_KEY_TEST").unwrap();
+        let api_key = env::var("GIPHY_API_KEY_TEST")
+            .unwrap_or_else(|e| panic!("Error retrieving env variable: {:?}", e));
         let api_root = server_url();
         let _m = mock("GET", Matcher::Regex(r"/search.*".to_string()))
             .with_status(200)
@@ -51,9 +52,7 @@ mod test {
         let req = SearchRequest::new("rage");
         let test_fut = api.search(&req).map(|response| {
             assert!(response.pagination.count > 0);
-        }).map_err(|err| 
-            panic!("{:?}", err)
-        );
+        }).map_err(|e| panic!("Error while calling search endpoint: {:?}", e));
 
         current_thread::run(test_fut);
     }
