@@ -1,18 +1,27 @@
 [package]
 name = "giphy"
-version = "0.1.0"
+version = "0.2.0"
+description = "Giphy API wrapper for Rust"
 authors = ["Maciej Makowski <maciejm.github(at)cfiet.net>"]
 edition = "2018"
+license = "MIT"
+repository = "https://github.com/cfiet/giphy-rs"
+keywords = ["giphy", "gif", "api", "rest", "http"]
+categories = ["api-bindings"]
+readme = "README.md"
+
+[badges]
+travis-ci = { repository = "cfiet/giphy-rs", branch = "master" }
 
 [dependencies]
-futures = "*"
 iso639-1 = "0.3.0"
-serde_derive = "*"
-serde = "*"
+futures = "0.1.25"
 reqwest = "0.9.9"
-# dotenv_codegen = "0.11.0"
+serde_derive = "1.0.89"
+serde = "1.0.89"
 
 [dev-dependencies]
-mockito = "0.16.0"
 dotenv = "0.13.0"
-tokio = "*"
+mockito = "0.16.0"
+tokio = "0.1.15"
+
