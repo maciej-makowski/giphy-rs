@@ -177,6 +177,7 @@ impl <'a> SearchRequest<'a> {
     }
 
     /// Limits the maximum number of GIF objects returned from [Search] request
+    /// *Note*: This parameter is currently ignored when making a request
     ///
     /// [Search]: https://developers.giphy.com/docs/#operation--gifs-search-get
     pub fn limit(&mut self, limit: u32) {
@@ -184,6 +185,7 @@ impl <'a> SearchRequest<'a> {
     }
 
     /// Specifies the number of GIF objects to skip when making [Search] request
+    /// *Note*: This parameter is currently ignored when making a request
     ///
     /// [Search]: https://developers.giphy.com/docs/#operation--gifs-search-get
     pub fn offset(&mut self, offset: u32) {
@@ -191,6 +193,7 @@ impl <'a> SearchRequest<'a> {
     }
 
     /// Specifies the language to use making the [Search] request
+    /// *Note*: This parameter is currently ignored when making a request
     ///
     /// [Search]: https://developers.giphy.com/docs/#operation--gifs-search-get
     pub fn lang(&mut self, lang: &iso639_1::Iso639_1) {
