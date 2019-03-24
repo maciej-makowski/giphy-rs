@@ -1,6 +1,9 @@
 use futures::Future;
 use super::model::{SearchRequest, SearchResponse};
 
+/// Implementation of Giphy API that uses asynchronous [`reqwest::async::Client`]
+///
+/// [`reqwest::async::Client`]: https://docs.rs/reqwest/0.9.12/reqwest/async/struct.Client.html
 pub struct Api {
     _url: String,
     _key: String,
@@ -8,6 +11,7 @@ pub struct Api {
 }
 
 impl Api {
+    /// Creates a new Giphy API Client
     pub fn new(url: String, key: String, client: reqwest::r#async::Client) -> Api {
         Api {
             _url: url,
@@ -16,6 +20,9 @@ impl Api {
         }
     }
 
+    /// Performs search against [Giphy Search Endpoint]
+    ///
+    /// [Giphy Search Endpoit]: https://developers.giphy.com/docs/#operation--gifs-search-get
     pub fn search(&self, req: &SearchRequest) -> impl Future<Item = SearchResponse, Error = reqwest::Error> {
         let endpoint = format!("{}/search", self._url);
 
