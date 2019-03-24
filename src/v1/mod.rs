@@ -1,5 +1,7 @@
 //! [Giphy API v1] wrapper for Rust
 //!
+//! *Note*: This library currently only supports [`search`] endpoint of the [Giphy API v1]
+//!
 //! # Examples
 //!
 //! ## Synchronous client
@@ -21,6 +23,7 @@
 //! ```
 //!
 //! [Giphy API v1]: https://developers.giphy.com/docs/
+//! [`search`]: https://developers.giphy.com/docs/#path--gifs-search
 mod model;
 mod sync;
 mod r#async;
