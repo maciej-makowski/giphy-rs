@@ -8,8 +8,7 @@ matrix:
   - rust: nightly
     fast_finish: true
 cache: cargo
-deploy:
-  on:
-    branch: master
-  provider: cargo
-  token: "JdPtlix7ATnvHvWQV2IWTIaaFpXqKgw0rVYsYdjaq8vCK6aaV6ZgiiAnisl02q6FUIOJCyOsdxGbRfo7CLPjsN36EHjbQaFY3YQGy/ZcrhWrWiRyR52CZ159ycxsAUKpP56utx11dKTwDTBL+lNly24f4h0EmPoE5/VlRt1c9tUgzo3w8rS8BhJeswPzsxTmVaiCxhp46aoPfpV6KLEAtpGPyXBIJJ9gr5CbbyQLTjxOj/pSDMgNFw+8W4iY6WJTBXry8uCgGsg/9uU8GlK66kWjslI/kPp8XE77fTZnAF/a5HwWNxHM2mYPosMN8rgZWZnS2dFa14s5hc7nCHoOrAveIcL2XDan4ANbUpbHzzygOTC7WK2PcTBSiscli7ehPMGGo90TW6g4FQtmMiYn9AS9AVCvs0Cg6pVRdK/ZXY9pXg7+hrY8AcG06R7kbbF/9zBhsFdQswii9CLQZXlBlln98ZkvIgAYC4n+hItmDC4bozvT+j/T5on33QnVAJv3bwRc4rSX/+VlSUHdnbb4IjQfywtbc5D+6aPgS56bo9rs76bQx4NEMApLcIV+PVfLw5jxCsgg03ulrZ0zXnTx/mjGYMaAjF+LeWojsPcctziiSAv+WPwYgVcmmk8qsvEph4F/I8/33sz9XU7AXnVz+0mCZ+HrljOLsGUMyrKDQTg="
+# deploy:
+  # on:
+  #   branch: master
+  # provider: cargo
