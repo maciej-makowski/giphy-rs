@@ -43,7 +43,7 @@ mod test {
     fn api_search_200_ok() {
         dotenv().ok();
         let api_key = env::var("GIPHY_API_KEY_TEST")
-            .unwrap_or_else(|e| panic!("Error retrieving env variable: {:?}", e;
+            .unwrap_or_else(|e| panic!("Error retrieving env variable: {:?}", e));
         let api_root = server_url();
         let _m = mock("GET", Matcher::Regex(r"/search.*".to_string()))
             .with_status(200)
