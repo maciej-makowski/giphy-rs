@@ -1,7 +1,9 @@
-use std::convert::From;
-
+/// Default API URL for Giphy v1 API
 pub static API_ROOT: &str = "https://api.giphy.com/v1/gifs";
 
+/// Giphy [`Meta`] object representation
+///
+/// [`Meta`]: https://developers.giphy.com/docs/#metacontent-object
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Meta {
     pub msg: String,
@@ -9,6 +11,10 @@ pub struct Meta {
     pub response_id: String
 }
 
+
+/// Giphy [`Pagination`] object representation
+///
+/// [`Pagination`]: https://developers.giphy.com/docs/#pagination-object
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Pagination {
     pub count: i32,
@@ -16,6 +22,9 @@ pub struct Pagination {
     pub offset: i32
 }
 
+/// Giphy [`User`] object representation
+///
+/// [`User`]: https://developers.giphy.com/docs/#user-object
 #[derive(Serialize, Deserialize, Debug)]
 pub struct User {
     pub avatar_url: String,
@@ -26,6 +35,9 @@ pub struct User {
     pub twitter: Option<String>
 }
 
+/// Giphy Animated [`Images`] object representation
+///
+/// [`Images`]: https://developers.giphy.com/docs/#images-object
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ImageAnimated {
     pub url: Option<String>,
@@ -38,6 +50,9 @@ pub struct ImageAnimated {
     pub webp_size: Option<String>
 }
 
+/// Giphy Still [`Images`] object representation
+///
+/// [`Images`]: https://developers.giphy.com/docs/#images-object
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ImageStill {
     pub url: String,
@@ -45,11 +60,17 @@ pub struct ImageStill {
     pub height: String
 }
 
+/// Giphy Looping [`Images`] object representation
+///
+/// [`Images`]: https://developers.giphy.com/docs/#images-object
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ImageLooping {
     pub mp4: String
 }
 
+/// Giphy MP4 Preview [`Images`] object representation
+///
+/// [`Images`]: https://developers.giphy.com/docs/#images-object
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ImagePreviewMp4 {
     pub mp4: String,
@@ -58,6 +79,9 @@ pub struct ImagePreviewMp4 {
     pub height: String
 }
 
+/// Giphy GIF Preview [`Images`] object representation
+///
+/// [`Images`]: https://developers.giphy.com/docs/#images-object
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ImagePreviewGif {
     pub url: String,
@@ -66,6 +90,9 @@ pub struct ImagePreviewGif {
     pub height: String
 }
 
+/// Giphy [`Images`] object representation
+///
+/// [`Images`]: https://developers.giphy.com/docs/#images-object
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Images {
     pub fixed_height: ImageAnimated,
@@ -90,6 +117,9 @@ pub struct Images {
     pub preview_gif: ImagePreviewGif
 }
 
+/// Giphy [`Gif`] object representation
+///
+/// [`Gif`]: https://developers.giphy.com/docs/#gif-object
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Gif {
     #[serde(alias = "type")]
@@ -113,6 +143,9 @@ pub struct Gif {
     pub title: String
 }
 
+/// Giphy [Search endpoint] response object representation
+///
+/// [Search endpoint]: https://developers.giphy.com/docs/#operation--gifs-search-get
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SearchResponse {
     pub data: Vec<Gif>,
@@ -120,20 +153,9 @@ pub struct SearchResponse {
     pub meta: Meta
 }
 
-
-#[derive(Debug)]
-pub struct ApiError {
-    text: String
-}
-
-impl From<reqwest::Error> for ApiError {
-    fn from(error: reqwest::Error) -> Self {
-        ApiError {
-            text: format!("{:?}", error)
-        }
-    }
-}
-
+/// Giphy [Search endpoint] request parameters
+///
+/// [Search endpoint]: https://developers.giphy.com/docs/#operation--gifs-search-get
 pub struct SearchRequest<'a> {
     pub (crate) query: &'a str,
     pub (crate) limit: Option<u32>,
@@ -142,6 +164,9 @@ pub struct SearchRequest<'a> {
 }
 
 impl <'a> SearchRequest<'a> {
+    /// Creates new [Search endpoint] request parameters
+    ///
+    /// [Search endpoint]: https://developers.giphy.com/docs/#operation--gifs-search-get
     pub fn new (query: &'a str) -> SearchRequest<'a> {
         SearchRequest {
             query,
@@ -151,14 +176,23 @@ impl <'a> SearchRequest<'a> {
         }
     }
 
+    /// Limits the maximum number of GIF objects returned from [Search] request
+    ///
+    /// [Search]: https://developers.giphy.com/docs/#operation--gifs-search-get
     pub fn limit(&mut self, limit: u32) {
         self.limit = Some(limit);
     }
 
+    /// Specifies the number of GIF objects to skip when making [Search] request
+    ///
+    /// [Search]: https://developers.giphy.com/docs/#operation--gifs-search-get
     pub fn offset(&mut self, offset: u32) {
         self.offset = Some(offset);
     }
 
+    /// Specifies the language to use making the [Search] request
+    ///
+    /// [Search]: https://developers.giphy.com/docs/#operation--gifs-search-get
     pub fn lang(&mut self, lang: &iso639_1::Iso639_1) {
         self.lang = Some(lang.clone());
     }
