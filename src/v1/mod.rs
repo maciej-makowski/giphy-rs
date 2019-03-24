@@ -13,7 +13,7 @@
 //! let api = SyncApi::new(API_ROOT.to_string(), key, client);
 //! ```
 //!
-//! ### Asynchronous client
+//! ## Asynchronous client
 //! ```
 //! use giphy::v1::{AsyncApi, API_ROOT};
 //!
