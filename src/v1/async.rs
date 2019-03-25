@@ -29,7 +29,7 @@ impl Api {
         self._client.get(&endpoint)
             .query(&[("q", req.query)])
             .send()
-            .and_then(|response| response.error_for_status())
+            .and_then(reqwest::r#async::Response::error_for_status)
             .and_then(|mut response| response.json::<SearchResponse>())
     }
 }
