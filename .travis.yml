@@ -8,7 +8,12 @@ matrix:
   - rust: nightly
     fast_finish: true
 cache: cargo
-# deploy:
-  # on:
-  #   branch: master
-  # provider: cargo
+deploy:
+  provider: cargo
+  token:
+    secure: aYhrEghRfMaIjk74498xxWsfNK/YX7O5PKs9b2w6DgsHsdKUFzuobIKjQ/McUEh44PolHTxvJH19PQettl2QIyfDVvG5Xj1fNnvu+h8CkjP7caE/Q95U15sOs/f/gnYyaelqeayCS6syKbi2XeCa6S10tEEHO7MTo3X6LIvji3ixsuaIQbTA6y4D4DLrRE1dpkLrJK2MmPZRtY5vFhpGvwPHM02OUcVlebJjolblWv2nWbj9qg8fZk92DygMpD2+kKrIs5KtjgYqInz8SkXpSulePkXaehEyYxv9uQP+wYQcU0pKNWDGutQBAmKyyKx0BNiVtAbR3XWhChDNPcQXmUNybrjc7a2KOqB6oRN08NPA78Ex0/dCqM8JhN0XtTUQZvQ847TobEVQbh0eG/W7mm0af9TW7/bJ8eLzl+1OruBVEfxHkag/w31t/CsMo/X/2zCbn/I50Du6gXa4Z6nnPID3111/QiMy5kRS8OMseinJko6zSzY5mrFwMdpVJRrNjYHhEPTVm9TGN1FGSt/GeTbZa/NAQp1kyeKISx+vYgG2DT22AFfzC6dXmakL0FCehhDkct546qRzVt5ATxTXiTgCSzQGAAbIoWCGwJCcfxUvxTER4J1mahzglXuVWLHmYC79dhfOEs5b9mTsXylsonXKN2dysqJzG3z+7HYvQUo=
+  on:
+    tags: true
+    all_branches: true
+    condition: "$TRAVIS_TAG =~ ^v\.[0-9]+\.[0-9]+\.[0-9]+"
+
