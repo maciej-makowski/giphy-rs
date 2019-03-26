@@ -25,9 +25,11 @@ impl Api {
     /// [Giphy Search Endpoit]: https://developers.giphy.com/docs/#operation--gifs-search-get
     pub fn search(&self, req: &SearchRequest) -> impl Future<Item = SearchResponse, Error = reqwest::Error> {
         let endpoint = format!("{}/search", self._url);
+        let mut params = req.as_params();
+        params.push(("api_key".to_string(), self._key.clone()));
 
         self._client.get(&endpoint)
-            .query(&[("q", req.query)])
+            .query(&params)
             .send()
             .and_then(reqwest::r#async::Response::error_for_status)
             .and_then(|mut response| response.json::<SearchResponse>())
