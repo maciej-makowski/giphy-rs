@@ -25,8 +25,11 @@ impl Api {
     pub fn search(&self, req: &SearchRequest) -> Result<SearchResponse, reqwest::Error> {
         let endpoint = format!("{}/search", self._url);
 
+        let mut params = req.as_params();
+        params.push(("api_key".to_string(), self._key.clone()));
+
         let response = self._client.get(&endpoint)
-            .query(&[("q", req.query)])
+            .query(&params)
             .send()?;
 
         let search_response = response

@@ -160,7 +160,6 @@ pub struct SearchRequest<'a> {
     pub (crate) query: &'a str,
     pub (crate) limit: Option<u32>,
     pub (crate) offset: Option<u32>,
-    pub (crate) lang: Option<iso639_1::Iso639_1>
 }
 
 impl <'a> SearchRequest<'a> {
@@ -172,35 +171,34 @@ impl <'a> SearchRequest<'a> {
             query,
             limit: None,
             offset: None,
-            lang: None
         }
     }
 
     /// Limits the maximum number of GIF objects returned from [Search] request
     ///
-    /// *Note*: This parameter is currently ignored when making a request
-    ///
     /// [Search]: https://developers.giphy.com/docs/#operation--gifs-search-get
-    pub fn limit(&mut self, limit: u32) {
+    pub fn limit(&mut self, limit: u32) -> &mut Self {
         self.limit = Some(limit);
+        self
     }
 
     /// Specifies the number of GIF objects to skip when making [Search] request
     ///
-    /// *Note*: This parameter is currently ignored when making a request
-    ///
     /// [Search]: https://developers.giphy.com/docs/#operation--gifs-search-get
-    pub fn offset(&mut self, offset: u32) {
+    pub fn offset(&mut self, offset: u32) -> &mut Self {
         self.offset = Some(offset);
+        self
     }
 
-    /// Specifies the language to use making the [Search] request
-    ///
-    /// *Note*: This parameter is currently ignored when making a request
-    ///
-    /// [Search]: https://developers.giphy.com/docs/#operation--gifs-search-get
-    pub fn lang(&mut self, lang: &iso639_1::Iso639_1) {
-        self.lang = Some(lang.clone());
+    pub(crate) fn as_params(&self) -> Vec<(String, String)> {
+        let mut params: Vec<(String, String)> = Vec::new();
+
+        params.push(("q".to_string(), self.query.to_string()));
+
+        self.limit.map(|v| ("limit".to_string(), v.to_string())).map(|v| params.push(v));
+        self.offset.map(|v| ("offset".to_string(), v.to_string())).map(|v| params.push(v));
+
+        params
     }
 }
 
@@ -216,7 +214,6 @@ mod test {
         assert_eq!(req.query, query);
         assert_eq!(req.offset, None);
         assert_eq!(req.limit, None);
-        assert_eq!(req.lang, None);
     }
 
     #[test]
@@ -235,15 +232,6 @@ mod test {
         req.limit(limit);
 
         assert_eq!(req.limit, Some(limit));
-    }
-
-    #[test]
-    fn search_request_lang() {
-        let lang = iso639_1::Iso639_1::En;
-        let mut req = SearchRequest::new("");
-        req.lang(&lang);
-
-        assert_eq!(req.lang, Some(lang));
     }
 }
 
