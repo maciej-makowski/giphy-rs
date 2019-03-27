@@ -1,5 +1,10 @@
 use futures::Future;
-use super::model::{SearchRequest, SearchResponse};
+use super::model::{
+    SearchRequest,
+    SearchResponse,
+    TrendingRequest,
+    TrendingResponse
+};
 
 /// Implementation of Giphy API that uses asynchronous [`reqwest::async::Client`]
 ///
@@ -20,19 +25,32 @@ impl Api {
         }
     }
 
-    /// Performs search against [Giphy Search Endpoint]
+    /// Performs search against Giphy [Search endpoint]
     ///
-    /// [Giphy Search Endpoit]: https://developers.giphy.com/docs/#operation--gifs-search-get
+    /// [Search endpoint]: https://developers.giphy.com/docs/#operation--gifs-search-get
     pub fn search(&self, req: &SearchRequest) -> impl Future<Item = SearchResponse, Error = reqwest::Error> {
-        let endpoint = format!("{}/search", self._url);
-        let mut params = req.as_params();
-        params.push(("api_key".to_string(), self._key.clone()));
+        let endpoint = format!("{}/gifs/search", self._url);
 
         self._client.get(&endpoint)
-            .query(&params)
+            .query(&[("api_key", self._key.clone())])
+            .query(&req)
             .send()
             .and_then(reqwest::r#async::Response::error_for_status)
             .and_then(|mut response| response.json::<SearchResponse>())
+    }
+
+    /// Performs search against Giphy [Trending endpoint]
+    ///
+    /// [Trending endpoint]: https://developers.giphy.com/docs/#path--gifs-trending
+    pub fn trending(&self, req: &TrendingRequest) -> impl Future<Item = TrendingResponse, Error = reqwest::Error> {
+        let endpoint = format!("{}/gifs/trending", self._url);
+
+        self._client.get(&endpoint)
+            .query(&[("api_key", self._key.clone())])
+            .query(&req)
+            .send()
+            .and_then(reqwest::r#async::Response::error_for_status)
+            .and_then(|mut response| response.json::<TrendingResponse>())
     }
 }
 
@@ -50,7 +68,7 @@ mod test {
         let api_key = env::var("GIPHY_API_KEY_TEST")
             .unwrap_or_else(|e| panic!("Error retrieving env variable: {:?}", e));
         let api_root = server_url();
-        let _m = mock("GET", Matcher::Regex(r"/search.*".to_string()))
+        let _m = mock("GET", Matcher::Regex(r"/gifs/search.*api_key=.+q=.+".to_string()))
             .with_status(200)
             .with_body_from_file("data/example-search-response.json")
             .create();
@@ -60,6 +78,28 @@ mod test {
 
         let req = SearchRequest::new("rage");
         let test_fut = api.search(&req).map(|response| {
+            assert!(response.pagination.count > 0);
+        }).map_err(|e| panic!("Error while calling search endpoint: {:?}", e));
+
+        current_thread::run(test_fut);
+    }
+
+    #[test]
+    fn api_trending_200_ok() {
+        dotenv().ok();
+        let api_key = env::var("GIPHY_API_KEY_TEST")
+            .unwrap_or_else(|e| panic!("Error retrieving env variable: {:?}", e));
+        let api_root = server_url();
+        let _m = mock("GET", Matcher::Regex(r"/gifs/trending.*api_key=.+".to_string()))
+            .with_status(200)
+            .with_body_from_file("data/example-trending-response.json")
+            .create();
+
+        let client = reqwest::r#async::Client::new();
+        let api = Api::new(api_root, api_key, client);
+
+        let req = TrendingRequest::new();
+        let test_fut = api.trending(&req).map(|response| {
             assert!(response.pagination.count > 0);
         }).map_err(|e| panic!("Error while calling search endpoint: {:?}", e));
 

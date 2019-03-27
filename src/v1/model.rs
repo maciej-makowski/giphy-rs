@@ -1,5 +1,5 @@
 /// Default API URL for Giphy v1 API
-pub static API_ROOT: &str = "https://api.giphy.com/v1/gifs";
+pub static API_ROOT: &str = "https://api.giphy.com/v1";
 
 /// Giphy [`Meta`] object representation
 ///
@@ -156,9 +156,14 @@ pub struct SearchResponse {
 /// Giphy [Search endpoint] request parameters
 ///
 /// [Search endpoint]: https://developers.giphy.com/docs/#operation--gifs-search-get
+#[derive(Serialize)]
 pub struct SearchRequest<'a> {
+
+    #[serde(rename = "q")]
     pub (crate) query: &'a str,
+
     pub (crate) limit: Option<u32>,
+
     pub (crate) offset: Option<u32>,
 }
 
@@ -167,11 +172,7 @@ impl <'a> SearchRequest<'a> {
     ///
     /// [Search endpoint]: https://developers.giphy.com/docs/#operation--gifs-search-get
     pub fn new (query: &'a str) -> SearchRequest<'a> {
-        SearchRequest {
-            query,
-            limit: None,
-            offset: None,
-        }
+        SearchRequest { query, limit: None, offset: None }
     }
 
     /// Limits the maximum number of GIF objects returned from [Search] request
@@ -189,16 +190,61 @@ impl <'a> SearchRequest<'a> {
         self.offset = Some(offset);
         self
     }
+}
 
-    pub(crate) fn as_params(&self) -> Vec<(String, String)> {
-        let mut params: Vec<(String, String)> = Vec::new();
+/// Giphy [Trending endpoint] response object representation
+///
+/// [Trending endpoint]: https://developers.giphy.com/docs/#path--gifs-trending
+#[derive(Serialize, Deserialize, Debug)]
+pub struct TrendingResponse {
+    pub data: Vec<Gif>,
+    pub pagination: Pagination,
+    pub meta: Meta
+}
 
-        params.push(("q".to_string(), self.query.to_string()));
+/// Giphy [Trending endpoint] request parameters
+///
+/// [Trending endpoint]: https://developers.giphy.com/docs/#path--gifs-trending
+#[derive(Serialize)]
+pub struct TrendingRequest<'a> {
 
-        self.limit.map(|v| ("limit".to_string(), v.to_string())).map(|v| params.push(v));
-        self.offset.map(|v| ("offset".to_string(), v.to_string())).map(|v| params.push(v));
+    pub (crate) rating: Option<&'a str>,
 
-        params
+    pub (crate) limit: Option<u32>,
+
+    pub (crate) offset: Option<u32>,
+}
+
+impl <'a> TrendingRequest<'a> {
+    /// Creates new [Trending endpoint] request parameters
+    ///
+    /// [Trending endpoint]: https://developers.giphy.com/docs/#path--gifs-trending
+    pub fn new() -> TrendingRequest<'a> {
+        TrendingRequest { rating: None, limit: None, offset: None }
+    }
+
+    /// Specifies the rating of GIF objects returned from [Trending] request
+    ///
+    /// [Trending]: https://developers.giphy.com/docs/#path--gifs-trending
+    pub fn rating<'b: 'a>(&mut self, rating: &'b str) -> &mut Self {
+        self.rating = Some(rating);
+        self
+    }
+
+    /// Limits the maximum number of GIF objects returned from [Trending] request
+    ///
+    /// [Trending]: https://developers.giphy.com/docs/#path--gifs-trending
+    pub fn limit(&mut self, limit: u32) -> &mut Self {
+        self.limit = Some(limit);
+        self
+    }
+
+    /// Specifies the number of GIF objects to skip when making [Trending] request
+    ///
+    /// [Trending]: https://developers.giphy.com/docs/#path--gifs-trending
+    pub fn offset(&mut self, offset: u32) -> &mut Self {
+        self.offset = Some(offset);
+        self
     }
 }
 
@@ -232,6 +278,35 @@ mod test {
         req.limit(limit);
 
         assert_eq!(req.limit, Some(limit));
+    }
+
+    #[test]
+    fn trending_request_new() {
+        let req = TrendingRequest::new();
+        assert_eq!(req.rating, None);
+        assert_eq!(req.limit, None);
+        assert_eq!(req.offset, None);
+    }
+
+    #[test]
+    fn trending_request_rating() {
+        let mut req = TrendingRequest::new();
+        req.rating("10");
+        assert_eq!(req.rating, Some("10"));
+    }
+
+    #[test]
+    fn trending_request_limit() {
+        let mut req = TrendingRequest::new();
+        req.limit(13);
+        assert_eq!(req.limit, Some(13));
+    }
+
+    #[test]
+    fn trending_request_offset() {
+        let mut req = TrendingRequest::new();
+        req.offset(13);
+        assert_eq!(req.offset, Some(13));
     }
 }
 
