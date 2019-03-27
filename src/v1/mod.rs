@@ -24,10 +24,10 @@
 //!
 //! [Giphy API v1]: https://developers.giphy.com/docs/
 //! [`search`]: https://developers.giphy.com/docs/#path--gifs-search
+mod r#async;
 mod model;
 mod sync;
-mod r#async;
 
 pub use model::*;
-pub use sync::Api as SyncApi;
 pub use r#async::Api as AsyncApi;
+pub use sync::Api as SyncApi;

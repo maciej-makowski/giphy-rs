@@ -1,3 +1,5 @@
+use std::default::Default;
+
 /// Default API URL for Giphy v1 API
 pub static API_ROOT: &str = "https://api.giphy.com/v1";
 
@@ -8,9 +10,8 @@ pub static API_ROOT: &str = "https://api.giphy.com/v1";
 pub struct Meta {
     pub msg: String,
     pub status: i32,
-    pub response_id: String
+    pub response_id: String,
 }
-
 
 /// Giphy [`Pagination`] object representation
 ///
@@ -19,7 +20,7 @@ pub struct Meta {
 pub struct Pagination {
     pub count: i32,
     pub total_count: i32,
-    pub offset: i32
+    pub offset: i32,
 }
 
 /// Giphy [`User`] object representation
@@ -32,7 +33,7 @@ pub struct User {
     pub profile_url: String,
     pub username: String,
     pub display_name: String,
-    pub twitter: Option<String>
+    pub twitter: Option<String>,
 }
 
 /// Giphy Animated [`Images`] object representation
@@ -47,7 +48,7 @@ pub struct ImageAnimated {
     pub mp4: Option<String>,
     pub mp4_size: Option<String>,
     pub webp: Option<String>,
-    pub webp_size: Option<String>
+    pub webp_size: Option<String>,
 }
 
 /// Giphy Still [`Images`] object representation
@@ -57,7 +58,7 @@ pub struct ImageAnimated {
 pub struct ImageStill {
     pub url: String,
     pub width: String,
-    pub height: String
+    pub height: String,
 }
 
 /// Giphy Looping [`Images`] object representation
@@ -65,7 +66,7 @@ pub struct ImageStill {
 /// [`Images`]: https://developers.giphy.com/docs/#images-object
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ImageLooping {
-    pub mp4: String
+    pub mp4: String,
 }
 
 /// Giphy MP4 Preview [`Images`] object representation
@@ -76,7 +77,7 @@ pub struct ImagePreviewMp4 {
     pub mp4: String,
     pub mp4_size: String,
     pub width: String,
-    pub height: String
+    pub height: String,
 }
 
 /// Giphy GIF Preview [`Images`] object representation
@@ -87,7 +88,7 @@ pub struct ImagePreviewGif {
     pub url: String,
     pub size: String,
     pub width: String,
-    pub height: String
+    pub height: String,
 }
 
 /// Giphy [`Images`] object representation
@@ -114,7 +115,7 @@ pub struct Images {
     pub original_still: ImageStill,
     pub looping: ImageLooping,
     pub preview: ImagePreviewMp4,
-    pub preview_gif: ImagePreviewGif
+    pub preview_gif: ImagePreviewGif,
 }
 
 /// Giphy [`Gif`] object representation
@@ -140,7 +141,7 @@ pub struct Gif {
     pub import_datetime: Option<String>,
     pub trending_datetime: Option<String>,
     pub images: Images,
-    pub title: String
+    pub title: String,
 }
 
 /// Giphy [Search endpoint] response object representation
@@ -150,7 +151,7 @@ pub struct Gif {
 pub struct SearchResponse {
     pub data: Vec<Gif>,
     pub pagination: Pagination,
-    pub meta: Meta
+    pub meta: Meta,
 }
 
 /// Giphy [Search endpoint] request parameters
@@ -158,21 +159,24 @@ pub struct SearchResponse {
 /// [Search endpoint]: https://developers.giphy.com/docs/#operation--gifs-search-get
 #[derive(Serialize)]
 pub struct SearchRequest<'a> {
-
     #[serde(rename = "q")]
-    pub (crate) query: &'a str,
+    pub(crate) query: &'a str,
 
-    pub (crate) limit: Option<u32>,
+    pub(crate) limit: Option<u32>,
 
-    pub (crate) offset: Option<u32>,
+    pub(crate) offset: Option<u32>,
 }
 
-impl <'a> SearchRequest<'a> {
+impl<'a> SearchRequest<'a> {
     /// Creates new [Search endpoint] request parameters
     ///
     /// [Search endpoint]: https://developers.giphy.com/docs/#operation--gifs-search-get
-    pub fn new (query: &'a str) -> SearchRequest<'a> {
-        SearchRequest { query, limit: None, offset: None }
+    pub fn new(query: &'a str) -> SearchRequest<'a> {
+        SearchRequest {
+            query,
+            limit: None,
+            offset: None,
+        }
     }
 
     /// Limits the maximum number of GIF objects returned from [Search] request
@@ -199,28 +203,27 @@ impl <'a> SearchRequest<'a> {
 pub struct TrendingResponse {
     pub data: Vec<Gif>,
     pub pagination: Pagination,
-    pub meta: Meta
+    pub meta: Meta,
 }
 
 /// Giphy [Trending endpoint] request parameters
 ///
 /// [Trending endpoint]: https://developers.giphy.com/docs/#path--gifs-trending
-#[derive(Serialize)]
+#[derive(Serialize, Default)]
 pub struct TrendingRequest<'a> {
+    pub(crate) rating: Option<&'a str>,
 
-    pub (crate) rating: Option<&'a str>,
+    pub(crate) limit: Option<u32>,
 
-    pub (crate) limit: Option<u32>,
-
-    pub (crate) offset: Option<u32>,
+    pub(crate) offset: Option<u32>,
 }
 
-impl <'a> TrendingRequest<'a> {
+impl<'a> TrendingRequest<'a> {
     /// Creates new [Trending endpoint] request parameters
     ///
     /// [Trending endpoint]: https://developers.giphy.com/docs/#path--gifs-trending
     pub fn new() -> TrendingRequest<'a> {
-        TrendingRequest { rating: None, limit: None, offset: None }
+        Default::default()
     }
 
     /// Specifies the rating of GIF objects returned from [Trending] request
@@ -309,4 +312,3 @@ mod test {
         assert_eq!(req.offset, Some(13));
     }
 }
-

@@ -1,8 +1,8 @@
 use std::env;
 
 use dotenv::dotenv;
-use giphy::v1::{AsyncApi, TrendingRequest};
 use futures::future::Future;
+use giphy::v1::{AsyncApi, TrendingRequest};
 use tokio;
 
 pub fn main() {
@@ -15,7 +15,8 @@ pub fn main() {
     let mut req = TrendingRequest::new();
     req.limit(1);
 
-    let test_fut = api.trending(&req)
+    let test_fut = api
+        .trending(&req)
         .map(|response| {
             println!("Response: {:?}", response);
             ()

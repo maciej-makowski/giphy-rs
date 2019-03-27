@@ -13,7 +13,8 @@ pub fn main() {
     let mut req = TrendingRequest::new();
     req.limit(1);
 
-    let response = api.trending(&req)
+    let response = api
+        .trending(&req)
         .unwrap_or_else(|e| panic!("Error while calling search endpoint: {:?}", e));
 
     println!("Response: {:?}", response);

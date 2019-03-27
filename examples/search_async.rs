@@ -1,8 +1,8 @@
 use std::env;
 
 use dotenv::dotenv;
-use giphy::v1::{AsyncApi, SearchRequest};
 use futures::future::Future;
+use giphy::v1::{AsyncApi, SearchRequest};
 use tokio;
 
 pub fn main() {
@@ -15,7 +15,8 @@ pub fn main() {
     let mut req = SearchRequest::new("rage");
     req.limit(1);
 
-    let test_fut = api.search(&req)
+    let test_fut = api
+        .search(&req)
         .map(|response| {
             println!("Response: {:?}", response);
             ()

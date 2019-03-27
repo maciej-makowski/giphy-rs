@@ -1,7 +1,7 @@
 use std::env;
 
 use dotenv::dotenv;
-use giphy::v1::{SyncApi, SearchRequest};
+use giphy::v1::{SearchRequest, SyncApi};
 
 pub fn main() {
     dotenv().ok();
@@ -13,7 +13,8 @@ pub fn main() {
     let mut req = SearchRequest::new("rage");
     req.limit(1);
 
-    let response = api.search(&req)
+    let response = api
+        .search(&req)
         .unwrap_or_else(|e| panic!("Error while calling search endpoint: {:?}", e));
 
     println!("Response: {:?}", response);
