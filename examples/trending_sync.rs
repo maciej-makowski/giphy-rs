@@ -1,7 +1,7 @@
 use std::env;
 
 use dotenv::dotenv;
-use giphy::v1::{SearchRequest, SyncApi};
+use giphy::v1::{SyncApi, TrendingRequest};
 
 pub fn main() {
     dotenv().ok();
@@ -10,11 +10,11 @@ pub fn main() {
     let client = reqwest::Client::new();
     let api = SyncApi::new(giphy::v1::API_ROOT.to_string(), api_key, client);
 
-    let mut req = SearchRequest::new("rage");
+    let mut req = TrendingRequest::new();
     req.limit(1);
 
     let response = api
-        .search(&req)
+        .trending(&req)
         .unwrap_or_else(|e| panic!("Error while calling search endpoint: {:?}", e));
 
     println!("Response: {:?}", response);

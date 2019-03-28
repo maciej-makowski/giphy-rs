@@ -2,7 +2,7 @@ use std::env;
 
 use dotenv::dotenv;
 use futures::future::Future;
-use giphy::v1::{AsyncApi, SearchRequest};
+use giphy::v1::{AsyncApi, TrendingRequest};
 use tokio;
 
 pub fn main() {
@@ -12,11 +12,11 @@ pub fn main() {
     let client = reqwest::r#async::Client::new();
     let api = AsyncApi::new(giphy::v1::API_ROOT.to_string(), api_key, client);
 
-    let mut req = SearchRequest::new("rage");
+    let mut req = TrendingRequest::new();
     req.limit(1);
 
     let test_fut = api
-        .search(&req)
+        .trending(&req)
         .map(|response| {
             println!("Response: {:?}", response);
             ()

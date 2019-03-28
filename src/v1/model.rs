@@ -1,5 +1,7 @@
+use std::default::Default;
+
 /// Default API URL for Giphy v1 API
-pub static API_ROOT: &str = "https://api.giphy.com/v1/gifs";
+pub static API_ROOT: &str = "https://api.giphy.com/v1";
 
 /// Giphy [`Meta`] object representation
 ///
@@ -8,9 +10,8 @@ pub static API_ROOT: &str = "https://api.giphy.com/v1/gifs";
 pub struct Meta {
     pub msg: String,
     pub status: i32,
-    pub response_id: String
+    pub response_id: String,
 }
-
 
 /// Giphy [`Pagination`] object representation
 ///
@@ -19,7 +20,7 @@ pub struct Meta {
 pub struct Pagination {
     pub count: i32,
     pub total_count: i32,
-    pub offset: i32
+    pub offset: i32,
 }
 
 /// Giphy [`User`] object representation
@@ -32,7 +33,7 @@ pub struct User {
     pub profile_url: String,
     pub username: String,
     pub display_name: String,
-    pub twitter: Option<String>
+    pub twitter: Option<String>,
 }
 
 /// Giphy Animated [`Images`] object representation
@@ -47,7 +48,7 @@ pub struct ImageAnimated {
     pub mp4: Option<String>,
     pub mp4_size: Option<String>,
     pub webp: Option<String>,
-    pub webp_size: Option<String>
+    pub webp_size: Option<String>,
 }
 
 /// Giphy Still [`Images`] object representation
@@ -57,7 +58,7 @@ pub struct ImageAnimated {
 pub struct ImageStill {
     pub url: String,
     pub width: String,
-    pub height: String
+    pub height: String,
 }
 
 /// Giphy Looping [`Images`] object representation
@@ -65,7 +66,7 @@ pub struct ImageStill {
 /// [`Images`]: https://developers.giphy.com/docs/#images-object
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ImageLooping {
-    pub mp4: String
+    pub mp4: String,
 }
 
 /// Giphy MP4 Preview [`Images`] object representation
@@ -76,7 +77,7 @@ pub struct ImagePreviewMp4 {
     pub mp4: String,
     pub mp4_size: String,
     pub width: String,
-    pub height: String
+    pub height: String,
 }
 
 /// Giphy GIF Preview [`Images`] object representation
@@ -87,7 +88,7 @@ pub struct ImagePreviewGif {
     pub url: String,
     pub size: String,
     pub width: String,
-    pub height: String
+    pub height: String,
 }
 
 /// Giphy [`Images`] object representation
@@ -114,7 +115,7 @@ pub struct Images {
     pub original_still: ImageStill,
     pub looping: ImageLooping,
     pub preview: ImagePreviewMp4,
-    pub preview_gif: ImagePreviewGif
+    pub preview_gif: ImagePreviewGif,
 }
 
 /// Giphy [`Gif`] object representation
@@ -140,7 +141,7 @@ pub struct Gif {
     pub import_datetime: Option<String>,
     pub trending_datetime: Option<String>,
     pub images: Images,
-    pub title: String
+    pub title: String,
 }
 
 /// Giphy [Search endpoint] response object representation
@@ -150,23 +151,27 @@ pub struct Gif {
 pub struct SearchResponse {
     pub data: Vec<Gif>,
     pub pagination: Pagination,
-    pub meta: Meta
+    pub meta: Meta,
 }
 
 /// Giphy [Search endpoint] request parameters
 ///
 /// [Search endpoint]: https://developers.giphy.com/docs/#operation--gifs-search-get
+#[derive(Serialize)]
 pub struct SearchRequest<'a> {
-    pub (crate) query: &'a str,
-    pub (crate) limit: Option<u32>,
-    pub (crate) offset: Option<u32>,
+    #[serde(rename = "q")]
+    pub(crate) query: &'a str,
+
+    pub(crate) limit: Option<u32>,
+
+    pub(crate) offset: Option<u32>,
 }
 
-impl <'a> SearchRequest<'a> {
+impl<'a> SearchRequest<'a> {
     /// Creates new [Search endpoint] request parameters
     ///
     /// [Search endpoint]: https://developers.giphy.com/docs/#operation--gifs-search-get
-    pub fn new (query: &'a str) -> SearchRequest<'a> {
+    pub fn new(query: &'a str) -> SearchRequest<'a> {
         SearchRequest {
             query,
             limit: None,
@@ -189,16 +194,60 @@ impl <'a> SearchRequest<'a> {
         self.offset = Some(offset);
         self
     }
+}
 
-    pub(crate) fn as_params(&self) -> Vec<(String, String)> {
-        let mut params: Vec<(String, String)> = Vec::new();
+/// Giphy [Trending endpoint] response object representation
+///
+/// [Trending endpoint]: https://developers.giphy.com/docs/#path--gifs-trending
+#[derive(Serialize, Deserialize, Debug)]
+pub struct TrendingResponse {
+    pub data: Vec<Gif>,
+    pub pagination: Pagination,
+    pub meta: Meta,
+}
 
-        params.push(("q".to_string(), self.query.to_string()));
+/// Giphy [Trending endpoint] request parameters
+///
+/// [Trending endpoint]: https://developers.giphy.com/docs/#path--gifs-trending
+#[derive(Serialize, Default)]
+pub struct TrendingRequest<'a> {
+    pub(crate) rating: Option<&'a str>,
 
-        self.limit.map(|v| ("limit".to_string(), v.to_string())).map(|v| params.push(v));
-        self.offset.map(|v| ("offset".to_string(), v.to_string())).map(|v| params.push(v));
+    pub(crate) limit: Option<u32>,
 
-        params
+    pub(crate) offset: Option<u32>,
+}
+
+impl<'a> TrendingRequest<'a> {
+    /// Creates new [Trending endpoint] request parameters
+    ///
+    /// [Trending endpoint]: https://developers.giphy.com/docs/#path--gifs-trending
+    pub fn new() -> TrendingRequest<'a> {
+        Default::default()
+    }
+
+    /// Specifies the rating of GIF objects returned from [Trending] request
+    ///
+    /// [Trending]: https://developers.giphy.com/docs/#path--gifs-trending
+    pub fn rating<'b: 'a>(&mut self, rating: &'b str) -> &mut Self {
+        self.rating = Some(rating);
+        self
+    }
+
+    /// Limits the maximum number of GIF objects returned from [Trending] request
+    ///
+    /// [Trending]: https://developers.giphy.com/docs/#path--gifs-trending
+    pub fn limit(&mut self, limit: u32) -> &mut Self {
+        self.limit = Some(limit);
+        self
+    }
+
+    /// Specifies the number of GIF objects to skip when making [Trending] request
+    ///
+    /// [Trending]: https://developers.giphy.com/docs/#path--gifs-trending
+    pub fn offset(&mut self, offset: u32) -> &mut Self {
+        self.offset = Some(offset);
+        self
     }
 }
 
@@ -233,5 +282,33 @@ mod test {
 
         assert_eq!(req.limit, Some(limit));
     }
-}
 
+    #[test]
+    fn trending_request_new() {
+        let req = TrendingRequest::new();
+        assert_eq!(req.rating, None);
+        assert_eq!(req.limit, None);
+        assert_eq!(req.offset, None);
+    }
+
+    #[test]
+    fn trending_request_rating() {
+        let mut req = TrendingRequest::new();
+        req.rating("10");
+        assert_eq!(req.rating, Some("10"));
+    }
+
+    #[test]
+    fn trending_request_limit() {
+        let mut req = TrendingRequest::new();
+        req.limit(13);
+        assert_eq!(req.limit, Some(13));
+    }
+
+    #[test]
+    fn trending_request_offset() {
+        let mut req = TrendingRequest::new();
+        req.offset(13);
+        assert_eq!(req.offset, Some(13));
+    }
+}

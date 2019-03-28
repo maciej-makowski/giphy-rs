@@ -11,9 +11,12 @@
 
 extern crate futures;
 extern crate reqwest;
-#[macro_use] extern crate serde_derive;
+#[macro_use]
+extern crate serde_derive;
 
-#[cfg(test)] extern crate tokio;
-#[cfg(test)] extern crate dotenv;
+#[cfg(test)]
+extern crate dotenv;
+#[cfg(test)]
+extern crate tokio;
 
 pub mod v1;
