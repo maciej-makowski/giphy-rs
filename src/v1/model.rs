@@ -251,6 +251,38 @@ impl<'a> TrendingRequest<'a> {
     }
 }
 
+/// Giphy [Translate endpoint] response object representation
+///
+/// [Translate endpoint]: https://developers.giphy.com/docs/#path--gifs-translate
+#[derive(Serialize, Deserialize, Debug)]
+pub struct TranslateResponse {
+    pub data: Vec<Gif>,
+    pub pagination: Pagination,
+    pub meta: Meta,
+}
+
+/// Giphy [Trending endpoint] request parameters
+///
+/// [Translate endpoint]: https://developers.giphy.com/docs/#path--gifs-translate
+#[derive(Serialize, Default)]
+pub struct TranslateRequest<'a> {
+    #[serde(alias = "s")]
+    pub (crate) phrase: &'a str,
+
+    pub (crate) weirdness: Option<u8>
+}
+
+impl <'a> TranslateRequest<'a> {
+    pub fn new(phrase: &'a str) -> TranslateRequest {
+        TranslateRequest { phrase, weirdness: None }
+    }
+
+    pub fn weirdness(&mut self, value: u8) -> &mut Self {
+        self.weirdness = Some(value);
+        self
+    }
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -310,5 +342,20 @@ mod test {
         let mut req = TrendingRequest::new();
         req.offset(13);
         assert_eq!(req.offset, Some(13));
+    }
+
+    #[test]
+    fn translate_request_new() {
+        let req = TranslateRequest::new("hello");
+        assert_eq!(req.phrase, "hello");
+        assert_eq!(req.weirdness, None);
+    }
+
+    #[test]
+    fn translate_request_weirdness() {
+        let mut req = TranslateRequest::new("hello");
+        req.weirdness(10);
+        assert_eq!(req.phrase, "hello");
+        assert_eq!(req.weirdness, Some(10));
     }
 }
