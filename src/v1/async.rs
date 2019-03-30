@@ -1,24 +1,88 @@
-use super::model::{SearchRequest, SearchResponse, TrendingRequest, TrendingResponse};
+use serde::de::DeserializeOwned;
 use futures::Future;
+use super::model::{GiphyRequest};
 
 /// Implementation of Giphy API that uses asynchronous [`reqwest::async::Client`]
 ///
 /// [`reqwest::async::Client`]: https://docs.rs/reqwest/0.9.12/reqwest/async/struct.Client.html
-pub struct Api {
-    _url: String,
-    _key: String,
-    _client: reqwest::r#async::Client,
+pub struct AsyncApi {
+    url: String,
+    key: String,
+    client: reqwest::r#async::Client,
 }
 
-impl Api {
+impl AsyncApi {
     /// Creates a new Giphy API Client
-    pub fn new(url: String, key: String, client: reqwest::r#async::Client) -> Api {
-        Api {
-            _url: url,
-            _key: key,
-            _client: client,
+    pub fn new(url: String, key: String, client: reqwest::r#async::Client) -> AsyncApi {
+        AsyncApi {
+            url: url,
+            key: key,
+            client: client,
         }
     }
+}
+
+pub trait RunnableAsyncRequest<ResponseType> {
+    fn send_to(&self, api: &AsyncApi) -> Box<Future<Item = ResponseType, Error = reqwest::Error>>;
+}
+
+impl <RequestType, ResponseType: 'static> RunnableAsyncRequest<ResponseType> for RequestType
+    where RequestType: GiphyRequest<ResponseType>,
+          ResponseType: DeserializeOwned
+{
+    fn send_to(&self, api: &AsyncApi) -> Box<Future<Item = ResponseType, Error = reqwest::Error>> {
+        let endpoint = format!("{}/{}", api.url, self.get_endpoint());
+
+        let future = api.client
+            .get(&endpoint)
+            .query(&[("api_key", &api.key)])
+            .query(&self)
+            .send()
+            .and_then(reqwest::r#async::Response::error_for_status)
+            .and_then(|mut response| response.json::<ResponseType>());
+
+        Box::new(future)
+    } 
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    use dotenv::dotenv;
+    use mockito::{mock, server_url, Matcher};
+    use std::env;
+    use tokio::runtime::current_thread;
+    use crate::v1;
+
+    #[test]
+    fn api_search_200_ok() {
+        dotenv().ok();
+        let api_key = env::var("GIPHY_API_KEY_TEST")
+            .unwrap_or_else(|e| panic!("Error retrieving env variable: {:?}", e));
+        let api_root = server_url();
+        let _m = mock(
+            "GET",
+            Matcher::Regex(r"/gifs/search.*api_key=.+q=.+".to_string()),
+        )
+        .with_status(200)
+        .with_body_from_file("data/example-search-response.json")
+        .create();
+
+        let client = reqwest::r#async::Client::new();
+        let api = AsyncApi::new(api_root, api_key, client);
+
+        let test_fut = v1::gifs::SearchRequest::new("rage")
+            .send_to(&api)
+            .map(|response| {
+                assert!(response.pagination.count > 0);
+            })
+            .map_err(|e| panic!("Error while calling search endpoint: {:?}", e));
+
+        current_thread::run(test_fut);
+    }
+}
+
+/*
 
     /// Performs search against Giphy [Search endpoint]
     ///
@@ -59,39 +123,6 @@ impl Api {
 
 #[cfg(test)]
 mod test {
-    use super::*;
-    use dotenv::dotenv;
-    use mockito::{mock, server_url, Matcher};
-    use std::env;
-    use tokio::runtime::current_thread;
-
-    #[test]
-    fn api_search_200_ok() {
-        dotenv().ok();
-        let api_key = env::var("GIPHY_API_KEY_TEST")
-            .unwrap_or_else(|e| panic!("Error retrieving env variable: {:?}", e));
-        let api_root = server_url();
-        let _m = mock(
-            "GET",
-            Matcher::Regex(r"/gifs/search.*api_key=.+q=.+".to_string()),
-        )
-        .with_status(200)
-        .with_body_from_file("data/example-search-response.json")
-        .create();
-
-        let client = reqwest::r#async::Client::new();
-        let api = Api::new(api_root, api_key, client);
-
-        let req = SearchRequest::new("rage");
-        let test_fut = api
-            .search(&req)
-            .map(|response| {
-                assert!(response.pagination.count > 0);
-            })
-            .map_err(|e| panic!("Error while calling search endpoint: {:?}", e));
-
-        current_thread::run(test_fut);
-    }
 
     #[test]
     fn api_trending_200_ok() {
@@ -121,3 +152,4 @@ mod test {
         current_thread::run(test_fut);
     }
 }
+*/
