@@ -2,7 +2,7 @@ use serde::Serialize;
 use serde::de::DeserializeOwned;
 
 /// Default API URL for Giphy v1 API
-pub static API_ROOT: &str = "https://api.giphy.com/v1";
+pub static API_ROOT: &str = "https://api.giphy.com";
 
 /// Marks objects that can be sent to Giphy API endpoints
 pub trait GiphyRequest<ResponseType>: Serialize where ResponseType: DeserializeOwned {
@@ -176,8 +176,7 @@ pub struct TrendingResponse {
 /// [Translate endpoint]: https://developers.giphy.com/docs/#path--gifs-translate
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TranslateResponse {
-    pub data: Vec<Gif>,
-    pub pagination: Pagination,
+    pub data: Gif,
     pub meta: Meta,
 }
 

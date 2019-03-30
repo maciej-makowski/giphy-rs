@@ -1,5 +1,6 @@
-use serde::de::DeserializeOwned;
+use std::marker::Send;
 use futures::Future;
+use serde::de::DeserializeOwned;
 use super::model::{GiphyRequest};
 
 /// Implementation of Giphy API that uses asynchronous [`reqwest::async::Client`]
@@ -23,14 +24,16 @@ impl AsyncApi {
 }
 
 pub trait RunnableAsyncRequest<ResponseType> {
-    fn send_to(&self, api: &AsyncApi) -> Box<Future<Item = ResponseType, Error = reqwest::Error>>;
+    /// Sends a request to an [AsyncApi]
+    ///
+    /// [SyncApi]: ./struct.AsyncApi.html
+    fn send_to(&self, api: &AsyncApi) -> Box<Future<Item = ResponseType, Error = reqwest::Error> + Send>;
 }
 
 impl <RequestType, ResponseType: 'static> RunnableAsyncRequest<ResponseType> for RequestType
     where RequestType: GiphyRequest<ResponseType>,
-          ResponseType: DeserializeOwned
-{
-    fn send_to(&self, api: &AsyncApi) -> Box<Future<Item = ResponseType, Error = reqwest::Error>> {
+          ResponseType: DeserializeOwned + Send {
+    fn send_to(&self, api: &AsyncApi) -> Box<Future<Item = ResponseType, Error = reqwest::Error> + Send> {
         let endpoint = format!("{}/{}", api.url, self.get_endpoint());
 
         let future = api.client
@@ -80,49 +83,6 @@ mod test {
 
         current_thread::run(test_fut);
     }
-}
-
-/*
-
-    /// Performs search against Giphy [Search endpoint]
-    ///
-    /// [Search endpoint]: https://developers.giphy.com/docs/#operation--gifs-search-get
-    pub fn search(
-        &self,
-        req: &SearchRequest,
-    ) -> impl Future<Item = SearchResponse, Error = reqwest::Error> {
-        let endpoint = format!("{}/gifs/search", self._url);
-
-        self._client
-            .get(&endpoint)
-            .query(&[("api_key", self._key.clone())])
-            .query(&req)
-            .send()
-            .and_then(reqwest::r#async::Response::error_for_status)
-            .and_then(|mut response| response.json::<SearchResponse>())
-    }
-
-    /// Performs search against Giphy [Trending endpoint]
-    ///
-    /// [Trending endpoint]: https://developers.giphy.com/docs/#path--gifs-trending
-    pub fn trending(
-        &self,
-        req: &TrendingRequest,
-    ) -> impl Future<Item = TrendingResponse, Error = reqwest::Error> {
-        let endpoint = format!("{}/gifs/trending", self._url);
-
-        self._client
-            .get(&endpoint)
-            .query(&[("api_key", self._key.clone())])
-            .query(&req)
-            .send()
-            .and_then(reqwest::r#async::Response::error_for_status)
-            .and_then(|mut response| response.json::<TrendingResponse>())
-    }
-}
-
-#[cfg(test)]
-mod test {
 
     #[test]
     fn api_trending_200_ok() {
@@ -139,11 +99,10 @@ mod test {
         .create();
 
         let client = reqwest::r#async::Client::new();
-        let api = Api::new(api_root, api_key, client);
+        let api = AsyncApi::new(api_root, api_key, client);
 
-        let req = TrendingRequest::new();
-        let test_fut = api
-            .trending(&req)
+        let test_fut = v1::gifs::TrendingRequest::new()
+            .send_to(&api)
             .map(|response| {
                 assert!(response.pagination.count > 0);
             })
@@ -151,5 +110,32 @@ mod test {
 
         current_thread::run(test_fut);
     }
+
+    #[test]
+    fn api_translate_200_ok() {
+        dotenv().ok();
+        let api_key = env::var("GIPHY_API_KEY_TEST")
+            .unwrap_or_else(|e| panic!("Error retrieving env variable: {:?}", e));
+        let api_root = server_url();
+        let _m = mock(
+            "GET",
+            Matcher::Regex(r"/gifs/translate.*api_key=.+&s=.+".to_string()),
+        )
+        .with_status(200)
+        .with_body_from_file("data/example-translate-response.json")
+        .create();
+
+        let client = reqwest::r#async::Client::new();
+        let api = AsyncApi::new(api_root, api_key, client);
+
+        let test_fut = v1::gifs::TranslateRequest::new("rage")
+            .send_to(&api)
+            .map(|response| {
+                assert!(response.meta.status == 200);
+            })
+            .map_err(|e| panic!("Error while calling search endpoint: {:?}", e));
+
+        current_thread::run(test_fut);
+    }
 }
-*/
+

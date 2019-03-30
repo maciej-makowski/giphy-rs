@@ -1,7 +1,8 @@
 use std::env;
 
 use dotenv::dotenv;
-use giphy::v1::{SearchRequest, SyncApi};
+use giphy::v1::sync::*;
+use giphy::v1::gifs::TranslateRequest;
 
 pub fn main() {
     dotenv().ok();
@@ -10,12 +11,11 @@ pub fn main() {
     let client = reqwest::Client::new();
     let api = SyncApi::new(giphy::v1::API_ROOT.to_string(), api_key, client);
 
-    let mut req = SearchRequest::new("rage");
-    req.limit(1);
-
-    let response = api
-        .search(&req)
+    let response = TranslateRequest::new("rage")
+        .with_weirdness(10)
+        .send_to(&api)
         .unwrap_or_else(|e| panic!("Error while calling search endpoint: {:?}", e));
 
     println!("Response: {:?}", response);
 }
+
