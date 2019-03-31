@@ -39,7 +39,7 @@ impl <'p> SearchRequest<'p> {
     }
 }
 
-impl <'p> GiphyRequest<SearchResponse> for SearchRequest<'p> {
+impl <'p> GiphyRequest<PaginatedGifListResponse> for SearchRequest<'p> {
     fn get_endpoint(&self) -> &'static str {
         "v1/gifs/search"
     }
@@ -90,7 +90,7 @@ impl<'a> TrendingRequest<'a> {
     }
 }
 
-impl <'p> GiphyRequest<TrendingResponse> for TrendingRequest<'p> {
+impl <'p> GiphyRequest<PaginatedGifListResponse> for TrendingRequest<'p> {
     fn get_endpoint(&self) -> &'static str {
         "v1/gifs/trending"
     }
@@ -124,7 +124,7 @@ impl <'a> TranslateRequest<'a> {
     }
 }
 
-impl <'p> GiphyRequest< TranslateResponse> for TranslateRequest<'p> {
+impl <'p> GiphyRequest<SingleGifResponse> for TranslateRequest<'p> {
     fn get_endpoint(&self) -> &'static str {
         "v1/gifs/translate"
     }
@@ -165,7 +165,7 @@ impl <'a, 'b> RandomRequest<'a, 'b> {
     }
 }
 
-impl <'a, 'b> GiphyRequest<RandomResponse> for RandomRequest<'a, 'b> {
+impl <'a, 'b> GiphyRequest<SingleGifResponse> for RandomRequest<'a, 'b> {
     fn get_endpoint(&self) -> &'static str {
         "v1/gifs/random"
     }
@@ -191,7 +191,7 @@ impl GetGifRequest {
     }
 }
 
-impl GiphyRequest<GetGifResponse> for GetGifRequest {
+impl GiphyRequest<SingleGifResponse> for GetGifRequest {
     fn get_endpoint(&self) -> &str {
         &self.endpoint
     }
@@ -215,7 +215,7 @@ impl GetGifsRequest {
     }
 }
 
-impl GiphyRequest<GetGifsResponse> for GetGifsRequest {
+impl GiphyRequest<PaginatedGifListResponse> for GetGifsRequest {
     fn get_endpoint(&self) -> &str {
         "v1/gifs"
     }

@@ -150,62 +150,28 @@ pub struct Gif {
     pub title: String,
 }
 
-/// Giphy [Search endpoint] response object representation
+/// Paginated GIFs list response object representation
 ///
-/// [Search endpoint]: https://developers.giphy.com/docs/#operation--gifs-search-get
+/// Returned by the following endpoints:
+/// - [Search](https://developers.giphy.com/docs/#operation--gifs-search-get)
+/// - [Trending](https://developers.giphy.com/docs/#path--gifs-trending)
+/// - [Get GIFs by id](https://developers.giphy.com/docs/#path--gifs)
 #[derive(Serialize, Deserialize, Debug)]
-pub struct SearchResponse {
+pub struct PaginatedGifListResponse {
     pub data: Vec<Gif>,
     pub pagination: Pagination,
     pub meta: Meta,
 }
 
-
-/// Giphy [Trending endpoint] response object representation
+/// Single GIF response object representation
 ///
-/// [Trending endpoint]: https://developers.giphy.com/docs/#path--gifs-trending
+/// Returned by the following endpoints:
+/// - [Translate](https://developers.giphy.com/docs/#path--gifs-translate)
+/// - [Random](https://developers.giphy.com/docs/#path--gifs-random)
+/// - [Get GIF by id](https://developers.giphy.com/docs/#path--gifs--gif_id-)
 #[derive(Serialize, Deserialize, Debug)]
-pub struct TrendingResponse {
-    pub data: Vec<Gif>,
-    pub pagination: Pagination,
-    pub meta: Meta,
-}
-
-/// Giphy [Translate endpoint] response object representation
-///
-/// [Translate endpoint]: https://developers.giphy.com/docs/#path--gifs-translate
-#[derive(Serialize, Deserialize, Debug)]
-pub struct TranslateResponse {
+pub struct SingleGifResponse {
     pub data: Gif,
-    pub meta: Meta,
-}
-
-
-/// Giphy [Random endpoint] response object representation
-///
-/// [Random endpoint]: https://developers.giphy.com/docs/#path--gifs-random
-#[derive(Serialize, Deserialize, Debug)]
-pub struct RandomResponse {
-    pub data: Gif,
-    pub meta: Meta,
-}
-
-/// Giphy [Get GIF by id endpoint] response object representation
-///
-/// [Get GIF by id endpoint]: https://developers.giphy.com/docs/#path--gifs--gif_id-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct GetGifResponse {
-    pub data: Gif,
-    pub meta: Meta,
-}
-
-/// Giphy [Get GIFs by id endpoint] response object representation
-///
-/// [Get GIFs by id endpoint]: https://developers.giphy.com/docs/#path--gifs
-#[derive(Serialize, Deserialize, Debug)]
-pub struct GetGifsResponse {
-    pub data: Vec<Gif>,
-    pub pagination: Pagination,
     pub meta: Meta,
 }
 
