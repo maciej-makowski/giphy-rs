@@ -14,10 +14,10 @@
 //! Create a synchronous [`reqwest::Client`] and [`SyncApi`] object holding your API key
 //! 
 //! ```
-//! use giphy::v1::sync::SyncApi;
+//! use giphy::v1::sync::*;
 //! 
 //! let client = reqwest::Client::new();
-//! let api = SyncApi::new("[your Giphy API key]", client);
+//! let api = SyncApi::new("[your Giphy API key]".to_string(), client);
 //! ```
 //! 
 //! Then create and customise an appropriate request object from [`giphy::v1::gifs`] module
@@ -25,11 +25,11 @@
 //! 
 //! For example, to search for gifs related to "tacos"
 //! 
-//! ```
-//! # use giphy::v1::sync::SyncApi;
+//! ```no_run
+//! # use giphy::v1::sync::*;
 //! use giphy::v1::gifs::SearchRequest;
 //! # let client = reqwest::Client::new();
-//! # let api = SyncApi::new("[your Giphy API key]", client);
+//! # let api = SyncApi::new("[your Giphy API key]".to_string(), client);
 //! 
 //! let response = SearchRequest::new("tacos")  // Create search request
 //!     .with_limit(10)                         // Limit the number of objects in response
@@ -49,26 +49,27 @@
 //! Create an asynchronous [`reqwest::async::Client`] and [`AsyncApi`] object holding your API key
 //! 
 //! ```
-//! use giphy::v1::r#async::AsyncApi;
+//! use giphy::v1::r#async::*;
 //! 
 //! let client = reqwest::r#async::Client::new();
-//! let api = AsyncApi::new("[your Giphy API key]", client);
+//! let api = AsyncApi::new("[your Giphy API key]".to_string(), client);
 //! ```
 //! 
 //! The request object is created the same way as when using the synchronous API. The
 //! only difference is, [`send_to`] method will return a [`Future`] object when called
 //! with [`AsyncApi`].
 //! 
-//! ```
-//! # use giphy::v1::r#async::AsyncApi;
+//! ```no_run
+//! use futures::future::Future;
+//! # use giphy::v1::r#async::*;
 //! use giphy::v1::gifs::SearchRequest;
 //! # let client = reqwest::r#async::Client::new();
-//! # let api = AsyncApi::new("[your Giphy API key]", client);
+//! # let api = AsyncApi::new("[your Giphy API key]".to_string(), client);
 //! // Create search request the same way as with synchronous api
 //! let search_fut = SearchRequest::new("tacos")
 //!     .with_limit(10)
 //!     .send_to(&api) // Send the request using AsyncApi, this returns a Future
-//!     .map(|reponse| {
+//!     .map(|response| {
 //!         // Operate on response
 //!         println!("Response: {:?}", response);
 //!     });
@@ -78,6 +79,12 @@
 //! ### More examples
 //! See [examples] for showcase of all the currently possible [Giphy HTTP API]
 //! requests in both synchronous and asynchronous style.
+//! 
+//! To run the examples, create a `.env` file in the repository root with the
+//! following content
+//! ```sh
+//! GIPHY_API_KEY_TEST=[your Giphy API key]
+//! ```
 //!
 //! [Giphy]: https://giphy.com
 //! [Giphy API]: https://developers.giphy.com/docs/
