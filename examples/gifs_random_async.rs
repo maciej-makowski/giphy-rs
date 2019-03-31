@@ -2,8 +2,8 @@ use std::env;
 
 use dotenv::dotenv;
 use futures::future::Future;
-use giphy::v1::r#async::*;
 use giphy::v1::gifs::RandomRequest;
+use giphy::v1::r#async::*;
 
 use tokio;
 

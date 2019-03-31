@@ -1,11 +1,14 @@
-use serde::Serialize;
 use serde::de::DeserializeOwned;
+use serde::Serialize;
 
 /// Default API URL for Giphy v1 API
 pub static API_ROOT: &str = "https://api.giphy.com";
 
 /// Marks objects that can be sent to Giphy API endpoints
-pub trait GiphyRequest<ResponseType>: Serialize where ResponseType: DeserializeOwned {
+pub trait GiphyRequest<ResponseType>: Serialize
+where
+    ResponseType: DeserializeOwned,
+{
     fn get_endpoint(&self) -> &str;
 }
 
@@ -174,4 +177,3 @@ pub struct SingleGifResponse {
     pub data: Gif,
     pub meta: Meta,
 }
-

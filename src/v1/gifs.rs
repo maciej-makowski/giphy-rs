@@ -1,8 +1,8 @@
-use std::default::Default;
 pub use super::model::*;
+use std::default::Default;
 
 /// [Search endpoint] request
-/// 
+///
 /// [Search endpoint]: https://developers.giphy.com/docs/#operation--gifs-search-get
 #[derive(Serialize)]
 pub struct SearchRequest<'p> {
@@ -14,12 +14,16 @@ pub struct SearchRequest<'p> {
     pub(crate) offset: Option<u32>,
 }
 
-impl <'p> SearchRequest<'p> {
+impl<'p> SearchRequest<'p> {
     /// Creates new [Search endpoint] request
     ///
     /// [Search endpoint]: https://developers.giphy.com/docs/#operation--gifs-search-get
     pub fn new(query: &'p str) -> SearchRequest<'p> {
-        SearchRequest { query, limit: None, offset: None }
+        SearchRequest {
+            query,
+            limit: None,
+            offset: None,
+        }
     }
 
     /// Limits the maximum number of GIF objects returned from [Search] request
@@ -39,7 +43,7 @@ impl <'p> SearchRequest<'p> {
     }
 }
 
-impl <'p> GiphyRequest<PaginatedGifListResponse> for SearchRequest<'p> {
+impl<'p> GiphyRequest<PaginatedGifListResponse> for SearchRequest<'p> {
     fn get_endpoint(&self) -> &'static str {
         "v1/gifs/search"
     }
@@ -90,7 +94,7 @@ impl<'a> TrendingRequest<'a> {
     }
 }
 
-impl <'p> GiphyRequest<PaginatedGifListResponse> for TrendingRequest<'p> {
+impl<'p> GiphyRequest<PaginatedGifListResponse> for TrendingRequest<'p> {
     fn get_endpoint(&self) -> &'static str {
         "v1/gifs/trending"
     }
@@ -102,17 +106,20 @@ impl <'p> GiphyRequest<PaginatedGifListResponse> for TrendingRequest<'p> {
 #[derive(Serialize, Default)]
 pub struct TranslateRequest<'a> {
     #[serde(rename = "s")]
-    pub (crate) phrase: &'a str,
+    pub(crate) phrase: &'a str,
 
-    pub (crate) weirdness: Option<u8>
+    pub(crate) weirdness: Option<u8>,
 }
 
-impl <'a> TranslateRequest<'a> {
+impl<'a> TranslateRequest<'a> {
     /// Creates new [Translate endpoint] request
     ///
     /// [Translate endpoint]: https://developers.giphy.com/docs/#path--gifs-translate
     pub fn new(phrase: &'a str) -> TranslateRequest {
-        TranslateRequest { phrase, weirdness: None }
+        TranslateRequest {
+            phrase,
+            weirdness: None,
+        }
     }
 
     /// Specifies the weirdness value for [Translate] request
@@ -124,7 +131,7 @@ impl <'a> TranslateRequest<'a> {
     }
 }
 
-impl <'p> GiphyRequest<SingleGifResponse> for TranslateRequest<'p> {
+impl<'p> GiphyRequest<SingleGifResponse> for TranslateRequest<'p> {
     fn get_endpoint(&self) -> &'static str {
         "v1/gifs/translate"
     }
@@ -140,7 +147,7 @@ pub struct RandomRequest<'a, 'b> {
     pub(crate) rating: Option<&'b str>,
 }
 
-impl <'a, 'b> RandomRequest<'a, 'b> {
+impl<'a, 'b> RandomRequest<'a, 'b> {
     /// Creates new [Random endpoint] request
     ///
     /// [Random endpoint]: https://developers.giphy.com/docs/#path--gifs-random
@@ -165,7 +172,7 @@ impl <'a, 'b> RandomRequest<'a, 'b> {
     }
 }
 
-impl <'a, 'b> GiphyRequest<SingleGifResponse> for RandomRequest<'a, 'b> {
+impl<'a, 'b> GiphyRequest<SingleGifResponse> for RandomRequest<'a, 'b> {
     fn get_endpoint(&self) -> &'static str {
         "v1/gifs/random"
     }
@@ -177,7 +184,7 @@ impl <'a, 'b> GiphyRequest<SingleGifResponse> for RandomRequest<'a, 'b> {
 #[derive(Serialize)]
 pub struct GetGifRequest {
     #[serde(skip)]
-    pub(crate) endpoint: String
+    pub(crate) endpoint: String,
 }
 
 impl GetGifRequest {
@@ -186,7 +193,7 @@ impl GetGifRequest {
     /// [GIF by id]: https://developers.giphy.com/docs/#path--gifs--gif_id-
     pub fn new(gif_id: &str) -> GetGifRequest {
         GetGifRequest {
-            endpoint: format!("v1/gifs/{}", gif_id)
+            endpoint: format!("v1/gifs/{}", gif_id),
         }
     }
 }
@@ -197,13 +204,12 @@ impl GiphyRequest<SingleGifResponse> for GetGifRequest {
     }
 }
 
-
 /// Giphy [GIFs by id endpoint] request
 ///
 /// [GIFs by id endpoint]: https://developers.giphy.com/docs/#path--gifs
 #[derive(Serialize)]
 pub struct GetGifsRequest {
-    pub(crate) ids: String
+    pub(crate) ids: String,
 }
 
 impl GetGifsRequest {
@@ -227,9 +233,7 @@ mod test {
 
     #[test]
     fn search_request() {
-        let req = SearchRequest::new("hello")
-            .with_limit(100)
-            .with_offset(5);
+        let req = SearchRequest::new("hello").with_limit(100).with_offset(5);
 
         assert_eq!(req.get_endpoint(), "v1/gifs/search");
         assert_eq!(req.query, "hello");
@@ -252,8 +256,7 @@ mod test {
 
     #[test]
     fn translate_request() {
-        let req = TranslateRequest::new("rage")
-            .with_weirdness(10);
+        let req = TranslateRequest::new("rage").with_weirdness(10);
 
         assert_eq!(req.get_endpoint(), "v1/gifs/translate");
         assert_eq!(req.phrase, "rage");
@@ -262,9 +265,7 @@ mod test {
 
     #[test]
     fn random_request() {
-        let req = RandomRequest::new()
-            .with_tag("burrito")
-            .with_rating("g");
+        let req = RandomRequest::new().with_tag("burrito").with_rating("g");
 
         assert_eq!(req.get_endpoint(), "v1/gifs/random");
         assert_eq!(req.tag, Some("burrito"));
@@ -279,10 +280,9 @@ mod test {
 
     #[test]
     fn get_gifs_request() {
-        let ids = vec!("xT4uQulxzV39haRFjG","3og0IPxMM0erATueVW");
+        let ids = vec!["xT4uQulxzV39haRFjG", "3og0IPxMM0erATueVW"];
         let req = GetGifsRequest::new(ids);
         assert_eq!(req.get_endpoint(), "v1/gifs");
         assert_eq!(req.ids, "xT4uQulxzV39haRFjG,3og0IPxMM0erATueVW");
     }
 }
-
