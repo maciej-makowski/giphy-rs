@@ -1,5 +1,5 @@
 use std::default::Default;
-pub use super::model::{SearchResponse, TrendingResponse, TranslateResponse, RandomResponse, GiphyRequest};
+pub use super::model::*;
 
 /// [Search endpoint] request
 /// 
@@ -39,7 +39,7 @@ impl <'p> SearchRequest<'p> {
     }
 }
 
-impl <'p> GiphyRequest<SearchResponse> for SearchRequest<'p> {
+impl <'p> GiphyRequest<PaginatedGifListResponse> for SearchRequest<'p> {
     fn get_endpoint(&self) -> &'static str {
         "v1/gifs/search"
     }
@@ -90,7 +90,7 @@ impl<'a> TrendingRequest<'a> {
     }
 }
 
-impl <'p> GiphyRequest<TrendingResponse> for TrendingRequest<'p> {
+impl <'p> GiphyRequest<PaginatedGifListResponse> for TrendingRequest<'p> {
     fn get_endpoint(&self) -> &'static str {
         "v1/gifs/trending"
     }
@@ -124,7 +124,7 @@ impl <'a> TranslateRequest<'a> {
     }
 }
 
-impl <'p> GiphyRequest<TranslateResponse> for TranslateRequest<'p> {
+impl <'p> GiphyRequest<SingleGifResponse> for TranslateRequest<'p> {
     fn get_endpoint(&self) -> &'static str {
         "v1/gifs/translate"
     }
@@ -165,9 +165,59 @@ impl <'a, 'b> RandomRequest<'a, 'b> {
     }
 }
 
-impl <'a, 'b> GiphyRequest<RandomResponse> for RandomRequest<'a, 'b> {
+impl <'a, 'b> GiphyRequest<SingleGifResponse> for RandomRequest<'a, 'b> {
     fn get_endpoint(&self) -> &'static str {
         "v1/gifs/random"
+    }
+}
+
+/// Giphy [GIF by id endpoint] request
+///
+/// [GIF by id endpoint]: https://developers.giphy.com/docs/#path--gifs--gif_id-
+#[derive(Serialize)]
+pub struct GetGifRequest {
+    #[serde(skip)]
+    pub(crate) endpoint: String
+}
+
+impl GetGifRequest {
+    /// Created new [GIF by id] request
+    ///
+    /// [GIF by id]: https://developers.giphy.com/docs/#path--gifs--gif_id-
+    pub fn new(gif_id: &str) -> GetGifRequest {
+        GetGifRequest {
+            endpoint: format!("v1/gifs/{}", gif_id)
+        }
+    }
+}
+
+impl GiphyRequest<SingleGifResponse> for GetGifRequest {
+    fn get_endpoint(&self) -> &str {
+        &self.endpoint
+    }
+}
+
+
+/// Giphy [GIFs by id endpoint] request
+///
+/// [GIFs by id endpoint]: https://developers.giphy.com/docs/#path--gifs
+#[derive(Serialize)]
+pub struct GetGifsRequest {
+    pub(crate) ids: String
+}
+
+impl GetGifsRequest {
+    /// Created new [GIFs by id] request
+    ///
+    /// [GIFs by id endpoint]: https://developers.giphy.com/docs/#path--gifs
+    pub fn new(ids: Vec<&str>) -> GetGifsRequest {
+        GetGifsRequest { ids: ids.join(",") }
+    }
+}
+
+impl GiphyRequest<PaginatedGifListResponse> for GetGifsRequest {
+    fn get_endpoint(&self) -> &str {
+        "v1/gifs"
     }
 }
 
@@ -219,6 +269,20 @@ mod test {
         assert_eq!(req.get_endpoint(), "v1/gifs/random");
         assert_eq!(req.tag, Some("burrito"));
         assert_eq!(req.rating, Some("g"));
+    }
+
+    #[test]
+    fn get_gif_request() {
+        let req = GetGifRequest::new("xT4uQulxzV39haRFjG");
+        assert_eq!(req.get_endpoint(), "v1/gifs/xT4uQulxzV39haRFjG");
+    }
+
+    #[test]
+    fn get_gifs_request() {
+        let ids = vec!("xT4uQulxzV39haRFjG","3og0IPxMM0erATueVW");
+        let req = GetGifsRequest::new(ids);
+        assert_eq!(req.get_endpoint(), "v1/gifs");
+        assert_eq!(req.ids, "xT4uQulxzV39haRFjG,3og0IPxMM0erATueVW");
     }
 }
 
