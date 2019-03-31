@@ -12,7 +12,7 @@ synchronous and asynchronous style. See [Crate documentation] and examples for d
 Stickers API and posting GIFs is currently not supported. 
 
 This library is still under development and the API is subject to change. Since [Giphy] does not specify the 
-parts of GIF object that are optional, there is potentially still an issue with reponse object model,
+parts of GIF object that are optional, there is potentially still an issue with response object model,
 where actual objects returned by API may not be possible to deserialize into Rust. I am making an
 active effort to integration-test the library an make sure that the response model is complete,
 but if you run into an JSON deserialization error, create an issue with the object ID / request params

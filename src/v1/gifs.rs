@@ -1,7 +1,7 @@
-pub use super::model::*;
+use super::model::*;
 use std::default::Default;
 
-/// [Search endpoint] request
+/// Giphy [Search endpoint] request
 ///
 /// [Search endpoint]: https://developers.giphy.com/docs/#operation--gifs-search-get
 #[derive(Serialize)]

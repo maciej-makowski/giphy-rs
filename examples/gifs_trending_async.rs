@@ -12,7 +12,7 @@ pub fn main() {
     let api_key = env::var("GIPHY_API_KEY_TEST")
         .unwrap_or_else(|e| panic!("Error retrieving env variable: {:?}", e));
     let client = reqwest::r#async::Client::new();
-    let api = AsyncApi::new(giphy::v1::API_ROOT.to_string(), api_key, client);
+    let api = AsyncApi::new(api_key, client);
 
     let test_fut = TrendingRequest::new()
         .with_limit(1)

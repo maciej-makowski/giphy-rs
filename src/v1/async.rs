@@ -1,4 +1,4 @@
-use super::model::GiphyRequest;
+use super::model::{GiphyRequest, API_ROOT};
 use futures::Future;
 use serde::de::DeserializeOwned;
 use std::marker::Send;
@@ -14,12 +14,15 @@ pub struct AsyncApi {
 
 impl AsyncApi {
     /// Creates a new Giphy API Client
-    pub fn new(url: String, key: String, client: reqwest::r#async::Client) -> AsyncApi {
-        AsyncApi {
-            url: url,
-            key: key,
-            client: client,
-        }
+    pub fn new(key: String, client: reqwest::r#async::Client) -> AsyncApi {
+        AsyncApi { url: API_ROOT.to_string(), key, client }
+    }
+
+    /// Creates a new Giphy API Client with a custom API root
+    /// 
+    /// Useful for testing against API mocks
+    pub fn new_with_url(api_root_url: String, key: String, client: reqwest::r#async::Client) -> AsyncApi {
+        AsyncApi { url: api_root_url, key, client }
     }
 }
 
@@ -81,7 +84,7 @@ mod test {
         .create();
 
         let client = reqwest::r#async::Client::new();
-        let api = AsyncApi::new(api_root, api_key, client);
+        let api = AsyncApi::new_with_url(api_root, api_key, client);
 
         let test_fut = v1::gifs::SearchRequest::new("rage")
             .send_to(&api)
@@ -108,7 +111,7 @@ mod test {
         .create();
 
         let client = reqwest::r#async::Client::new();
-        let api = AsyncApi::new(api_root, api_key, client);
+        let api = AsyncApi::new_with_url(api_root, api_key, client);
 
         let test_fut = v1::gifs::TrendingRequest::new()
             .send_to(&api)
@@ -135,7 +138,7 @@ mod test {
         .create();
 
         let client = reqwest::r#async::Client::new();
-        let api = AsyncApi::new(api_root, api_key, client);
+        let api = AsyncApi::new_with_url(api_root, api_key, client);
 
         let test_fut = v1::gifs::TranslateRequest::new("rage")
             .send_to(&api)
@@ -162,7 +165,7 @@ mod test {
         .create();
 
         let client = reqwest::r#async::Client::new();
-        let api = AsyncApi::new(api_root, api_key, client);
+        let api = AsyncApi::new_with_url(api_root, api_key, client);
 
         let test_fut = v1::gifs::RandomRequest::new()
             .send_to(&api)
@@ -189,7 +192,7 @@ mod test {
         .create();
 
         let client = reqwest::r#async::Client::new();
-        let api = AsyncApi::new(api_root, api_key, client);
+        let api = AsyncApi::new_with_url(api_root, api_key, client);
 
         let test_fut = v1::gifs::GetGifRequest::new("xT4uQulxzV39haRFjG")
             .send_to(&api)
@@ -216,7 +219,7 @@ mod test {
         .create();
 
         let client = reqwest::r#async::Client::new();
-        let api = AsyncApi::new(api_root, api_key, client);
+        let api = AsyncApi::new_with_url(api_root, api_key, client);
 
         let test_fut =
             v1::gifs::GetGifsRequest::new(vec!["xT4uQulxzV39haRFjG", "3og0IPxMM0erATueVW"])
