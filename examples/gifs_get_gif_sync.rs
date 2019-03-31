@@ -1,8 +1,8 @@
 use std::env;
 
 use dotenv::dotenv;
-use giphy::v1::sync::*;
 use giphy::v1::gifs::GetGifRequest;
+use giphy::v1::sync::*;
 
 pub fn main() {
     dotenv().ok();
@@ -17,4 +17,3 @@ pub fn main() {
 
     println!("Response: {:?}", response);
 }
-

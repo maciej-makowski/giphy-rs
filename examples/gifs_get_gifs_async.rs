@@ -2,8 +2,8 @@ use std::env;
 
 use dotenv::dotenv;
 use futures::future::Future;
-use giphy::v1::r#async::*;
 use giphy::v1::gifs::GetGifsRequest;
+use giphy::v1::r#async::*;
 
 use tokio;
 
@@ -14,7 +14,7 @@ pub fn main() {
     let client = reqwest::r#async::Client::new();
     let api = AsyncApi::new(giphy::v1::API_ROOT.to_string(), api_key, client);
 
-    let test_fut = GetGifsRequest::new(vec!("xT4uQulxzV39haRFjG","3og0IPxMM0erATueVW"))
+    let test_fut = GetGifsRequest::new(vec!["xT4uQulxzV39haRFjG", "3og0IPxMM0erATueVW"])
         .send_to(&api)
         .map(|response| {
             println!("Response: {:?}", response);

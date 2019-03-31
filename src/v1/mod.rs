@@ -27,8 +27,8 @@
 //! [Giphy API v1]: https://developers.giphy.com/docs/
 //! [`search`]: https://developers.giphy.com/docs/#path--gifs-search
 pub mod r#async;
-mod model;
 pub mod gifs;
+mod model;
 pub mod sync;
 
 pub use model::*;

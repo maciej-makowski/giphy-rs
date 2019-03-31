@@ -1,7 +1,7 @@
-use std::marker::Send;
+use super::model::GiphyRequest;
 use futures::Future;
 use serde::de::DeserializeOwned;
-use super::model::{GiphyRequest};
+use std::marker::Send;
 
 /// Implementation of Giphy API that uses asynchronous [`reqwest::async::Client`]
 ///
@@ -27,16 +27,25 @@ pub trait RunnableAsyncRequest<ResponseType> {
     /// Sends a request to an [AsyncApi]
     ///
     /// [SyncApi]: ./struct.AsyncApi.html
-    fn send_to(&self, api: &AsyncApi) -> Box<Future<Item = ResponseType, Error = reqwest::Error> + Send>;
+    fn send_to(
+        &self,
+        api: &AsyncApi,
+    ) -> Box<Future<Item = ResponseType, Error = reqwest::Error> + Send>;
 }
 
-impl <'a, RequestType, ResponseType> RunnableAsyncRequest<ResponseType> for RequestType
-    where RequestType: GiphyRequest<ResponseType>,
-          ResponseType: 'static + DeserializeOwned + Send {
-    fn send_to(&self, api: &AsyncApi) -> Box<Future<Item = ResponseType, Error = reqwest::Error> + Send> {
+impl<'a, RequestType, ResponseType> RunnableAsyncRequest<ResponseType> for RequestType
+where
+    RequestType: GiphyRequest<ResponseType>,
+    ResponseType: 'static + DeserializeOwned + Send,
+{
+    fn send_to(
+        &self,
+        api: &AsyncApi,
+    ) -> Box<Future<Item = ResponseType, Error = reqwest::Error> + Send> {
         let endpoint = format!("{}/{}", api.url, self.get_endpoint());
 
-        let future = api.client
+        let future = api
+            .client
             .get(&endpoint)
             .query(&[("api_key", &api.key)])
             .query(&self)
@@ -45,17 +54,17 @@ impl <'a, RequestType, ResponseType> RunnableAsyncRequest<ResponseType> for Requ
             .and_then(|mut response| response.json::<ResponseType>());
 
         Box::new(future)
-    } 
+    }
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
+    use crate::v1;
     use dotenv::dotenv;
     use mockito::{mock, server_url, Matcher};
     use std::env;
     use tokio::runtime::current_thread;
-    use crate::v1;
 
     #[test]
     fn api_search_200_ok() {
@@ -209,14 +218,14 @@ mod test {
         let client = reqwest::r#async::Client::new();
         let api = AsyncApi::new(api_root, api_key, client);
 
-        let test_fut = v1::gifs::GetGifsRequest::new(vec!("xT4uQulxzV39haRFjG","3og0IPxMM0erATueVW"))
-            .send_to(&api)
-            .map(|response| {
-                assert!(response.meta.status == 200);
-            })
-            .map_err(|e| panic!("Error while calling search endpoint: {:?}", e));
+        let test_fut =
+            v1::gifs::GetGifsRequest::new(vec!["xT4uQulxzV39haRFjG", "3og0IPxMM0erATueVW"])
+                .send_to(&api)
+                .map(|response| {
+                    assert!(response.meta.status == 200);
+                })
+                .map_err(|e| panic!("Error while calling search endpoint: {:?}", e));
 
         current_thread::run(test_fut);
     }
 }
-

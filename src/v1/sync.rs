@@ -1,6 +1,6 @@
 use serde::de::DeserializeOwned;
 
-use super::model::{GiphyRequest};
+use super::model::GiphyRequest;
 
 /// Implementation of Giphy API that uses synchronous [`reqwest::Client`]
 ///
@@ -29,21 +29,22 @@ pub trait RunnableSyncRequest<ResponseType> {
     fn send_to(&self, api: &SyncApi) -> Result<ResponseType, reqwest::Error>;
 }
 
-impl <'a, RequestType, ResponseType> RunnableSyncRequest<ResponseType> for RequestType
-    where RequestType: GiphyRequest<ResponseType>,
-          ResponseType: DeserializeOwned {
-
-    fn send_to(&self, api: &SyncApi) -> Result<ResponseType, reqwest::Error> { 
+impl<'a, RequestType, ResponseType> RunnableSyncRequest<ResponseType> for RequestType
+where
+    RequestType: GiphyRequest<ResponseType>,
+    ResponseType: DeserializeOwned,
+{
+    fn send_to(&self, api: &SyncApi) -> Result<ResponseType, reqwest::Error> {
         let endpoint = format!("{}/{}", api.url, self.get_endpoint());
 
-        let response = api.client
+        let response = api
+            .client
             .get(&endpoint)
             .query(&[("api_key", api.key.clone())])
             .query(&self)
             .send()?;
 
-        let response_data = response.error_for_status()?
-            .json::<ResponseType>()?;
+        let response_data = response.error_for_status()?.json::<ResponseType>()?;
 
         Ok(response_data)
     }
@@ -195,11 +196,11 @@ mod test {
         let client = reqwest::Client::new();
         let api = SyncApi::new(api_root, api_key, client);
 
-        let response = v1::gifs::GetGifsRequest::new(vec!("xT4uQulxzV39haRFjG","3og0IPxMM0erATueVW"))
-            .send_to(&api)
-            .unwrap_or_else(|e| panic!("Error while calling search endpoint: {:?}", e));
+        let response =
+            v1::gifs::GetGifsRequest::new(vec!["xT4uQulxzV39haRFjG", "3og0IPxMM0erATueVW"])
+                .send_to(&api)
+                .unwrap_or_else(|e| panic!("Error while calling search endpoint: {:?}", e));
 
         assert!(response.meta.status == 200);
     }
 }
-
