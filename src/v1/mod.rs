@@ -6,7 +6,8 @@
 //!
 //! ## Synchronous client
 //! ```
-//! use giphy::v1::{SyncApi, API_ROOT};
+//! use giphy::v1::API_ROOT;
+//! use giphy::v1::sync::*;
 //!
 //! let key = "Giphy API key".to_string();
 //! let client = reqwest::Client::new();
@@ -15,7 +16,8 @@
 //!
 //! ## Asynchronous client
 //! ```
-//! use giphy::v1::{AsyncApi, API_ROOT};
+//! use giphy::v1::API_ROOT;
+//! use giphy::v1::r#async::*;
 //!
 //! let key = "Giphy API key".to_string();
 //! let client = reqwest::r#async::Client::new();
@@ -24,10 +26,9 @@
 //!
 //! [Giphy API v1]: https://developers.giphy.com/docs/
 //! [`search`]: https://developers.giphy.com/docs/#path--gifs-search
-mod r#async;
+pub mod r#async;
 mod model;
-mod sync;
+pub mod gifs;
+pub mod sync;
 
 pub use model::*;
-pub use r#async::Api as AsyncApi;
-pub use sync::Api as SyncApi;

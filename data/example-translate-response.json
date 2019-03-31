@@ -1,0 +1,198 @@
+{
+  "data": {
+    "type": "gif",
+    "id": "13EjnL7RwHmA2Q",
+    "slug": "cheezburger-rage-13EjnL7RwHmA2Q",
+    "url": "https://giphy.com/gifs/cheezburger-rage-13EjnL7RwHmA2Q",
+    "bitly_gif_url": "https://gph.is/HEQUDq",
+    "bitly_url": "https://gph.is/HEQUDq",
+    "embed_url": "https://giphy.com/embed/13EjnL7RwHmA2Q",
+    "username": "cheezburger",
+    "source": "https://cheezburger.com/7880433920",
+    "rating": "g",
+    "content_url": "",
+    "source_tld": "cheezburger.com",
+    "source_post_url": "https://cheezburger.com/7880433920",
+    "is_sticker": 0,
+    "import_datetime": "2013-11-04 12:25:26",
+    "trending_datetime": "2013-11-04 12:25:26",
+    "user": {
+      "avatar_url": "https://media4.giphy.com/avatars/cheezburger/zygsw6sWuOPu.jpg",
+      "banner_url": "https://media4.giphy.com/avatars/cheezburger/XkuejOhoGLE6.jpg",
+      "banner_image": "https://media4.giphy.com/avatars/cheezburger/XkuejOhoGLE6.jpg",
+      "profile_url": "https://giphy.com/cheezburger/",
+      "username": "cheezburger",
+      "display_name": "Cheezburger",
+      "is_verified": false
+    },
+    "images": {
+      "fixed_height_still": {
+        "url": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/200_s.gif",
+        "width": "288",
+        "height": "200",
+        "size": "22848"
+      },
+      "original_still": {
+        "url": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/giphy_s.gif",
+        "width": "323",
+        "height": "224",
+        "size": "19815"
+      },
+      "fixed_width": {
+        "url": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/200w.gif",
+        "width": "200",
+        "height": "139",
+        "size": "804405",
+        "mp4": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/200w.mp4",
+        "mp4_size": "228476",
+        "webp": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/200w.webp",
+        "webp_size": "626142"
+      },
+      "fixed_height_small_still": {
+        "url": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/100_s.gif",
+        "width": "144",
+        "height": "100",
+        "size": "7445"
+      },
+      "fixed_height_downsampled": {
+        "url": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/200_d.gif",
+        "width": "288",
+        "height": "200",
+        "size": "156076",
+        "webp": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/200_d.webp",
+        "webp_size": "93738"
+      },
+      "preview": {
+        "width": "250",
+        "height": "174",
+        "mp4": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/giphy-preview.mp4",
+        "mp4_size": "40826"
+      },
+      "fixed_height_small": {
+        "url": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/100.gif",
+        "width": "144",
+        "height": "100",
+        "size": "496796",
+        "mp4": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/100.mp4",
+        "mp4_size": "117205",
+        "webp": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/100.webp",
+        "webp_size": "372848"
+      },
+      "downsized_still": {
+        "url": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/giphy_s.gif",
+        "width": "323",
+        "height": "224",
+        "size": "19815"
+      },
+      "downsized": {
+        "url": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/giphy.gif",
+        "width": "323",
+        "height": "224",
+        "size": "1007883"
+      },
+      "downsized_large": {
+        "url": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/giphy.gif",
+        "width": "323",
+        "height": "224",
+        "size": "1007883"
+      },
+      "fixed_width_small_still": {
+        "url": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/100w_s.gif",
+        "width": "100",
+        "height": "70",
+        "size": "4209"
+      },
+      "preview_webp": {
+        "url": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/giphy-preview.webp",
+        "width": "158",
+        "height": "110",
+        "size": "30988"
+      },
+      "fixed_width_still": {
+        "url": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/200w_s.gif",
+        "width": "200",
+        "height": "139",
+        "size": "14412"
+      },
+      "fixed_width_small": {
+        "url": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/100w.gif",
+        "width": "100",
+        "height": "70",
+        "size": "282513",
+        "mp4": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/100w.mp4",
+        "mp4_size": "45886",
+        "webp": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/100w.webp",
+        "webp_size": "219618"
+      },
+      "downsized_small": {
+        "width": "152",
+        "height": "106",
+        "mp4": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/giphy-downsized-small.mp4",
+        "mp4_size": "69914"
+      },
+      "fixed_width_downsampled": {
+        "url": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/200w_d.gif",
+        "width": "200",
+        "height": "139",
+        "size": "78027",
+        "webp": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/200w_d.webp",
+        "webp_size": "48364"
+      },
+      "downsized_medium": {
+        "url": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/giphy.gif",
+        "width": "323",
+        "height": "224",
+        "size": "1007883"
+      },
+      "original": {
+        "url": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/giphy.gif",
+        "width": "323",
+        "height": "224",
+        "size": "1007883",
+        "frames": "94",
+        "mp4": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/giphy.mp4",
+        "mp4_size": "1566586",
+        "webp": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/giphy.webp",
+        "webp_size": "1406860",
+        "hash": "1d2a7908167c286e516427e1f6721830"
+      },
+      "fixed_height": {
+        "url": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/200.gif",
+        "width": "288",
+        "height": "200",
+        "size": "1483687",
+        "mp4": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/200.mp4",
+        "mp4_size": "518577",
+        "webp": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/200.webp",
+        "webp_size": "1129794"
+      },
+      "looping": {
+        "mp4": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/giphy-loop.mp4",
+        "mp4_size": "1912803"
+      },
+      "original_mp4": {
+        "width": "480",
+        "height": "332",
+        "mp4": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/giphy.mp4",
+        "mp4_size": "1566586"
+      },
+      "preview_gif": {
+        "url": "https://media0.giphy.com/media/13EjnL7RwHmA2Q/giphy-preview.gif",
+        "width": "167",
+        "height": "116",
+        "size": "47983"
+      },
+      "480w_still": {
+        "url": "https://media3.giphy.com/media/13EjnL7RwHmA2Q/480w_s.jpg",
+        "width": "480",
+        "height": "333"
+      }
+    },
+    "title": "rage GIF by Cheezburger"
+  },
+  "meta": {
+    "status": 200,
+    "msg": "OK",
+    "response_id": "5c9ff515617974652e65f516"
+  }
+}

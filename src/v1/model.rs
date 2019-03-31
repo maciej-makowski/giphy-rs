@@ -1,7 +1,13 @@
-use std::default::Default;
+use serde::Serialize;
+use serde::de::DeserializeOwned;
 
 /// Default API URL for Giphy v1 API
-pub static API_ROOT: &str = "https://api.giphy.com/v1";
+pub static API_ROOT: &str = "https://api.giphy.com";
+
+/// Marks objects that can be sent to Giphy API endpoints
+pub trait GiphyRequest<ResponseType>: Serialize where ResponseType: DeserializeOwned {
+    fn get_endpoint(&self) -> &'static str;
+}
 
 /// Giphy [`Meta`] object representation
 ///
@@ -132,7 +138,7 @@ pub struct Gif {
     pub embed_url: String,
     pub username: String,
     pub source: String,
-    pub rating: String,
+    pub rating: Option<String>,
     pub user: Option<User>,
     pub source_tld: String,
     pub source_post_url: String,
@@ -154,47 +160,6 @@ pub struct SearchResponse {
     pub meta: Meta,
 }
 
-/// Giphy [Search endpoint] request parameters
-///
-/// [Search endpoint]: https://developers.giphy.com/docs/#operation--gifs-search-get
-#[derive(Serialize)]
-pub struct SearchRequest<'a> {
-    #[serde(rename = "q")]
-    pub(crate) query: &'a str,
-
-    pub(crate) limit: Option<u32>,
-
-    pub(crate) offset: Option<u32>,
-}
-
-impl<'a> SearchRequest<'a> {
-    /// Creates new [Search endpoint] request parameters
-    ///
-    /// [Search endpoint]: https://developers.giphy.com/docs/#operation--gifs-search-get
-    pub fn new(query: &'a str) -> SearchRequest<'a> {
-        SearchRequest {
-            query,
-            limit: None,
-            offset: None,
-        }
-    }
-
-    /// Limits the maximum number of GIF objects returned from [Search] request
-    ///
-    /// [Search]: https://developers.giphy.com/docs/#operation--gifs-search-get
-    pub fn limit(&mut self, limit: u32) -> &mut Self {
-        self.limit = Some(limit);
-        self
-    }
-
-    /// Specifies the number of GIF objects to skip when making [Search] request
-    ///
-    /// [Search]: https://developers.giphy.com/docs/#operation--gifs-search-get
-    pub fn offset(&mut self, offset: u32) -> &mut Self {
-        self.offset = Some(offset);
-        self
-    }
-}
 
 /// Giphy [Trending endpoint] response object representation
 ///
@@ -206,109 +171,22 @@ pub struct TrendingResponse {
     pub meta: Meta,
 }
 
-/// Giphy [Trending endpoint] request parameters
+/// Giphy [Translate endpoint] response object representation
 ///
-/// [Trending endpoint]: https://developers.giphy.com/docs/#path--gifs-trending
-#[derive(Serialize, Default)]
-pub struct TrendingRequest<'a> {
-    pub(crate) rating: Option<&'a str>,
-
-    pub(crate) limit: Option<u32>,
-
-    pub(crate) offset: Option<u32>,
+/// [Translate endpoint]: https://developers.giphy.com/docs/#path--gifs-translate
+#[derive(Serialize, Deserialize, Debug)]
+pub struct TranslateResponse {
+    pub data: Gif,
+    pub meta: Meta,
 }
 
-impl<'a> TrendingRequest<'a> {
-    /// Creates new [Trending endpoint] request parameters
-    ///
-    /// [Trending endpoint]: https://developers.giphy.com/docs/#path--gifs-trending
-    pub fn new() -> TrendingRequest<'a> {
-        Default::default()
-    }
 
-    /// Specifies the rating of GIF objects returned from [Trending] request
-    ///
-    /// [Trending]: https://developers.giphy.com/docs/#path--gifs-trending
-    pub fn rating<'b: 'a>(&mut self, rating: &'b str) -> &mut Self {
-        self.rating = Some(rating);
-        self
-    }
-
-    /// Limits the maximum number of GIF objects returned from [Trending] request
-    ///
-    /// [Trending]: https://developers.giphy.com/docs/#path--gifs-trending
-    pub fn limit(&mut self, limit: u32) -> &mut Self {
-        self.limit = Some(limit);
-        self
-    }
-
-    /// Specifies the number of GIF objects to skip when making [Trending] request
-    ///
-    /// [Trending]: https://developers.giphy.com/docs/#path--gifs-trending
-    pub fn offset(&mut self, offset: u32) -> &mut Self {
-        self.offset = Some(offset);
-        self
-    }
+/// Giphy [Random endpoint] response object representation
+///
+/// [Random endpoint]: https://developers.giphy.com/docs/#path--gifs-random
+#[derive(Serialize, Deserialize, Debug)]
+pub struct RandomResponse {
+    pub data: Gif,
+    pub meta: Meta,
 }
 
-#[cfg(test)]
-mod test {
-    use super::*;
-
-    #[test]
-    fn search_request_new() {
-        let query = "test";
-        let req = SearchRequest::new(query);
-
-        assert_eq!(req.query, query);
-        assert_eq!(req.offset, None);
-        assert_eq!(req.limit, None);
-    }
-
-    #[test]
-    fn search_request_offset() {
-        let offset = 10u32;
-        let mut req = SearchRequest::new("");
-        req.offset(offset);
-
-        assert_eq!(req.offset, Some(offset));
-    }
-
-    #[test]
-    fn search_request_limit() {
-        let limit = 10u32;
-        let mut req = SearchRequest::new("");
-        req.limit(limit);
-
-        assert_eq!(req.limit, Some(limit));
-    }
-
-    #[test]
-    fn trending_request_new() {
-        let req = TrendingRequest::new();
-        assert_eq!(req.rating, None);
-        assert_eq!(req.limit, None);
-        assert_eq!(req.offset, None);
-    }
-
-    #[test]
-    fn trending_request_rating() {
-        let mut req = TrendingRequest::new();
-        req.rating("10");
-        assert_eq!(req.rating, Some("10"));
-    }
-
-    #[test]
-    fn trending_request_limit() {
-        let mut req = TrendingRequest::new();
-        req.limit(13);
-        assert_eq!(req.limit, Some(13));
-    }
-
-    #[test]
-    fn trending_request_offset() {
-        let mut req = TrendingRequest::new();
-        req.offset(13);
-        assert_eq!(req.offset, Some(13));
-    }
-}

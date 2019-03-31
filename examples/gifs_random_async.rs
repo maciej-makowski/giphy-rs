@@ -2,7 +2,9 @@ use std::env;
 
 use dotenv::dotenv;
 use futures::future::Future;
-use giphy::v1::{AsyncApi, TrendingRequest};
+use giphy::v1::r#async::*;
+use giphy::v1::gifs::RandomRequest;
+
 use tokio;
 
 pub fn main() {
@@ -12,11 +14,8 @@ pub fn main() {
     let client = reqwest::r#async::Client::new();
     let api = AsyncApi::new(giphy::v1::API_ROOT.to_string(), api_key, client);
 
-    let mut req = TrendingRequest::new();
-    req.limit(1);
-
-    let test_fut = api
-        .trending(&req)
+    let test_fut = RandomRequest::new()
+        .send_to(&api)
         .map(|response| {
             println!("Response: {:?}", response);
             ()
