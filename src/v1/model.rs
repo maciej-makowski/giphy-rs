@@ -6,7 +6,7 @@ pub static API_ROOT: &str = "https://api.giphy.com";
 
 /// Marks objects that can be sent to Giphy API endpoints
 pub trait GiphyRequest<ResponseType>: Serialize where ResponseType: DeserializeOwned {
-    fn get_endpoint(&self) -> &'static str;
+    fn get_endpoint(&self) -> &str;
 }
 
 /// Giphy [`Meta`] object representation

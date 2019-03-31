@@ -124,7 +124,7 @@ impl <'a> TranslateRequest<'a> {
     }
 }
 
-impl <'p> GiphyRequest<TranslateResponse> for TranslateRequest<'p> {
+impl <'p> GiphyRequest< TranslateResponse> for TranslateRequest<'p> {
     fn get_endpoint(&self) -> &'static str {
         "v1/gifs/translate"
     }
@@ -168,6 +168,26 @@ impl <'a, 'b> RandomRequest<'a, 'b> {
 impl <'a, 'b> GiphyRequest<RandomResponse> for RandomRequest<'a, 'b> {
     fn get_endpoint(&self) -> &'static str {
         "v1/gifs/random"
+    }
+}
+
+#[derive(Serialize)]
+pub struct GetGifRequest {
+    #[serde(skip)]
+    pub(crate) endpoint: String
+}
+
+impl GetGifRequest {
+    pub fn new(gif_id: &str) -> GetGifRequest {
+        GetGifRequest {
+            endpoint: format!("v1/gifs/{}", gif_id)
+        }
+    }
+}
+
+impl GiphyRequest<RandomResponse> for GetGifRequest {
+    fn get_endpoint(&self) -> &str {
+        &self.endpoint
     }
 }
 
@@ -219,6 +239,12 @@ mod test {
         assert_eq!(req.get_endpoint(), "v1/gifs/random");
         assert_eq!(req.tag, Some("burrito"));
         assert_eq!(req.rating, Some("g"));
+    }
+
+    #[test]
+    fn get_gif_request() {
+        let req = GetGifRequest::new("xT4uQulxzV39haRFjG");
+        assert_eq!(req.get_endpoint(), "v1/gifs/xT4uQulxzV39haRFjG");
     }
 }
 
