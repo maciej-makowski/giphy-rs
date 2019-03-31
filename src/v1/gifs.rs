@@ -171,6 +171,9 @@ impl <'a, 'b> GiphyRequest<RandomResponse> for RandomRequest<'a, 'b> {
     }
 }
 
+/// Giphy [GIF by id endpoint] request
+///
+/// [GIF by id endpoint]: https://developers.giphy.com/docs/#path--gifs--gif_id-
 #[derive(Serialize)]
 pub struct GetGifRequest {
     #[serde(skip)]
@@ -178,6 +181,9 @@ pub struct GetGifRequest {
 }
 
 impl GetGifRequest {
+    /// Created new [GIF by id] request
+    ///
+    /// [GIF by id]: https://developers.giphy.com/docs/#path--gifs--gif_id-
     pub fn new(gif_id: &str) -> GetGifRequest {
         GetGifRequest {
             endpoint: format!("v1/gifs/{}", gif_id)
