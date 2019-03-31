@@ -190,3 +190,22 @@ pub struct RandomResponse {
     pub meta: Meta,
 }
 
+/// Giphy [Get GIF by id endpoint] response object representation
+///
+/// [Get GIF by id endpoint]: https://developers.giphy.com/docs/#path--gifs--gif_id-
+#[derive(Serialize, Deserialize, Debug)]
+pub struct GetGifResponse {
+    pub data: Gif,
+    pub meta: Meta,
+}
+
+/// Giphy [Get GIFs by id endpoint] response object representation
+///
+/// [Get GIFs by id endpoint]: https://developers.giphy.com/docs/#path--gifs
+#[derive(Serialize, Deserialize, Debug)]
+pub struct GetGifsResponse {
+    pub data: Vec<Gif>,
+    pub pagination: Pagination,
+    pub meta: Meta,
+}
+

@@ -191,5 +191,32 @@ mod test {
 
         current_thread::run(test_fut);
     }
+
+    #[test]
+    fn api_get_gifs_200_ok() {
+        dotenv().ok();
+        let api_key = env::var("GIPHY_API_KEY_TEST")
+            .unwrap_or_else(|e| panic!("Error retrieving env variable: {:?}", e));
+        let api_root = server_url();
+        let _m = mock(
+            "GET",
+            Matcher::Regex(r"/gifs.*api_key=.+ids=.+".to_string()),
+        )
+        .with_status(200)
+        .with_body_from_file("data/example-get-gifs-response.json")
+        .create();
+
+        let client = reqwest::r#async::Client::new();
+        let api = AsyncApi::new(api_root, api_key, client);
+
+        let test_fut = v1::gifs::GetGifsRequest::new(vec!("xT4uQulxzV39haRFjG","3og0IPxMM0erATueVW"))
+            .send_to(&api)
+            .map(|response| {
+                assert!(response.meta.status == 200);
+            })
+            .map_err(|e| panic!("Error while calling search endpoint: {:?}", e));
+
+        current_thread::run(test_fut);
+    }
 }
 
