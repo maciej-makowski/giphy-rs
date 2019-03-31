@@ -138,7 +138,7 @@ pub struct Gif {
     pub embed_url: String,
     pub username: String,
     pub source: String,
-    pub rating: String,
+    pub rating: Option<String>,
     pub user: Option<User>,
     pub source_tld: String,
     pub source_post_url: String,
@@ -176,6 +176,16 @@ pub struct TrendingResponse {
 /// [Translate endpoint]: https://developers.giphy.com/docs/#path--gifs-translate
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TranslateResponse {
+    pub data: Gif,
+    pub meta: Meta,
+}
+
+
+/// Giphy [Random endpoint] response object representation
+///
+/// [Random endpoint]: https://developers.giphy.com/docs/#path--gifs-random
+#[derive(Serialize, Deserialize, Debug)]
+pub struct RandomResponse {
     pub data: Gif,
     pub meta: Meta,
 }

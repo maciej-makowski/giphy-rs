@@ -1,0 +1,209 @@
+{
+  "data": {
+    "type": "gif",
+    "id": "PR6YIRmkPSVxu",
+    "slug": "stick-PR6YIRmkPSVxu",
+    "url": "https://giphy.com/gifs/stick-PR6YIRmkPSVxu",
+    "bitly_gif_url": "https://gph.is/2gNISyt",
+    "bitly_url": "https://gph.is/2gNISyt",
+    "embed_url": "https://giphy.com/embed/PR6YIRmkPSVxu",
+    "username": "",
+    "source": "https://www.reddit.com/r/gifs/comments/5fa8zn/thats_how_you_handle_a_stick/",
+    "content_url": "",
+    "source_tld": "www.reddit.com",
+    "source_post_url": "https://www.reddit.com/r/gifs/comments/5fa8zn/thats_how_you_handle_a_stick/",
+    "is_sticker": 0,
+    "import_datetime": "2016-11-28 06:48:56",
+    "trending_datetime": "0000-00-00 00:00:00",
+    "images": {
+      "fixed_height_still": {
+        "url": "https://media1.giphy.com/media/PR6YIRmkPSVxu/200_s.gif",
+        "width": "267",
+        "height": "200",
+        "size": "9844"
+      },
+      "original_still": {
+        "url": "https://media1.giphy.com/media/PR6YIRmkPSVxu/giphy_s.gif",
+        "width": "720",
+        "height": "540",
+        "size": "90853"
+      },
+      "fixed_width": {
+        "url": "https://media1.giphy.com/media/PR6YIRmkPSVxu/200w.gif",
+        "width": "200",
+        "height": "150",
+        "size": "738309",
+        "mp4": "https://media1.giphy.com/media/PR6YIRmkPSVxu/200w.mp4",
+        "mp4_size": "107314",
+        "webp": "https://media1.giphy.com/media/PR6YIRmkPSVxu/200w.webp",
+        "webp_size": "1362778"
+      },
+      "fixed_height_small_still": {
+        "url": "https://media1.giphy.com/media/PR6YIRmkPSVxu/100_s.gif",
+        "width": "134",
+        "height": "100",
+        "size": "3080"
+      },
+      "fixed_height_downsampled": {
+        "url": "https://media1.giphy.com/media/PR6YIRmkPSVxu/200_d.gif",
+        "width": "267",
+        "height": "200",
+        "size": "71263",
+        "webp": "https://media1.giphy.com/media/PR6YIRmkPSVxu/200_d.webp",
+        "webp_size": "74876"
+      },
+      "preview": {
+        "width": "176",
+        "height": "132",
+        "mp4": "https://media1.giphy.com/media/PR6YIRmkPSVxu/giphy-preview.mp4",
+        "mp4_size": "34660"
+      },
+      "fixed_height_small": {
+        "url": "https://media1.giphy.com/media/PR6YIRmkPSVxu/100.gif",
+        "width": "134",
+        "height": "100",
+        "size": "384335",
+        "mp4": "https://media1.giphy.com/media/PR6YIRmkPSVxu/100.mp4",
+        "mp4_size": "63979",
+        "webp": "https://media1.giphy.com/media/PR6YIRmkPSVxu/100.webp",
+        "webp_size": "804728"
+      },
+      "downsized_still": {
+        "url": "https://media1.giphy.com/media/PR6YIRmkPSVxu/giphy-tumblr_s.gif",
+        "width": "250",
+        "height": "249",
+        "size": "13503"
+      },
+      "downsized": {
+        "url": "https://media1.giphy.com/media/PR6YIRmkPSVxu/giphy-tumblr.gif",
+        "width": "250",
+        "height": "249",
+        "size": "873501"
+      },
+      "downsized_large": {
+        "url": "https://media1.giphy.com/media/PR6YIRmkPSVxu/giphy-downsized-large.gif",
+        "width": "576",
+        "height": "432",
+        "size": "5052143"
+      },
+      "fixed_width_small_still": {
+        "url": "https://media1.giphy.com/media/PR6YIRmkPSVxu/100w_s.gif",
+        "width": "100",
+        "height": "75",
+        "size": "2100"
+      },
+      "preview_webp": {
+        "url": "https://media1.giphy.com/media/PR6YIRmkPSVxu/giphy-preview.webp",
+        "width": "164",
+        "height": "123",
+        "size": "49380"
+      },
+      "fixed_width_still": {
+        "url": "https://media1.giphy.com/media/PR6YIRmkPSVxu/200w_s.gif",
+        "width": "200",
+        "height": "150",
+        "size": "5519"
+      },
+      "fixed_width_small": {
+        "url": "https://media1.giphy.com/media/PR6YIRmkPSVxu/100w.gif",
+        "width": "100",
+        "height": "75",
+        "size": "240245",
+        "mp4": "https://media1.giphy.com/media/PR6YIRmkPSVxu/100w.mp4",
+        "mp4_size": "45972",
+        "webp": "https://media1.giphy.com/media/PR6YIRmkPSVxu/100w.webp",
+        "webp_size": "519070"
+      },
+      "downsized_small": {
+        "width": "229",
+        "height": "172",
+        "mp4": "https://media1.giphy.com/media/PR6YIRmkPSVxu/giphy-downsized-small.mp4",
+        "mp4_size": "144064"
+      },
+      "fixed_width_downsampled": {
+        "url": "https://media1.giphy.com/media/PR6YIRmkPSVxu/200w_d.gif",
+        "width": "200",
+        "height": "150",
+        "size": "40482",
+        "webp": "https://media1.giphy.com/media/PR6YIRmkPSVxu/200w_d.webp",
+        "webp_size": "44172"
+      },
+      "downsized_medium": {
+        "url": "https://media1.giphy.com/media/PR6YIRmkPSVxu/giphy-downsized-medium.gif",
+        "width": "576",
+        "height": "432",
+        "size": "4289253"
+      },
+      "original": {
+        "url": "https://media1.giphy.com/media/PR6YIRmkPSVxu/giphy.gif",
+        "width": "720",
+        "height": "540",
+        "size": "10884923",
+        "frames": "214",
+        "mp4": "https://media1.giphy.com/media/PR6YIRmkPSVxu/giphy.mp4",
+        "mp4_size": "394889",
+        "webp": "https://media1.giphy.com/media/PR6YIRmkPSVxu/giphy.webp",
+        "webp_size": "18975698",
+        "hash": "f41022eb8000f62aaa39d9194aff7e91"
+      },
+      "fixed_height": {
+        "url": "https://media1.giphy.com/media/PR6YIRmkPSVxu/200.gif",
+        "width": "267",
+        "height": "200",
+        "size": "1283647",
+        "mp4": "https://media1.giphy.com/media/PR6YIRmkPSVxu/200.mp4",
+        "mp4_size": "157042",
+        "webp": "https://media1.giphy.com/media/PR6YIRmkPSVxu/200.webp",
+        "webp_size": "2232068"
+      },
+      "looping": {
+        "mp4": "https://media1.giphy.com/media/PR6YIRmkPSVxu/giphy-loop.mp4",
+        "mp4_size": "955781"
+      },
+      "original_mp4": {
+        "width": "480",
+        "height": "360",
+        "mp4": "https://media1.giphy.com/media/PR6YIRmkPSVxu/giphy.mp4",
+        "mp4_size": "394889"
+      },
+      "preview_gif": {
+        "url": "https://media1.giphy.com/media/PR6YIRmkPSVxu/giphy-preview.gif",
+        "width": "149",
+        "height": "112",
+        "size": "48282"
+      },
+      "480w_still": {
+        "url": "https://media4.giphy.com/media/PR6YIRmkPSVxu/480w_s.jpg",
+        "width": "480",
+        "height": "360"
+      }
+    },
+    "title": "stick GIF",
+    "image_original_url": "https://media1.giphy.com/media/PR6YIRmkPSVxu/giphy.gif",
+    "image_url": "https://media1.giphy.com/media/PR6YIRmkPSVxu/giphy.gif",
+    "image_mp4_url": "https://media1.giphy.com/media/PR6YIRmkPSVxu/giphy.mp4",
+    "image_frames": "214",
+    "image_width": "720",
+    "image_height": "540",
+    "fixed_height_downsampled_url": "https://media1.giphy.com/media/PR6YIRmkPSVxu/200_d.gif",
+    "fixed_height_downsampled_width": "267",
+    "fixed_height_downsampled_height": "200",
+    "fixed_width_downsampled_url": "https://media1.giphy.com/media/PR6YIRmkPSVxu/200w_d.gif",
+    "fixed_width_downsampled_width": "200",
+    "fixed_width_downsampled_height": "150",
+    "fixed_height_small_url": "https://media1.giphy.com/media/PR6YIRmkPSVxu/100.gif",
+    "fixed_height_small_still_url": "https://media1.giphy.com/media/PR6YIRmkPSVxu/100_s.gif",
+    "fixed_height_small_width": "134",
+    "fixed_height_small_height": "100",
+    "fixed_width_small_url": "https://media1.giphy.com/media/PR6YIRmkPSVxu/100w.gif",
+    "fixed_width_small_still_url": "https://media1.giphy.com/media/PR6YIRmkPSVxu/100w_s.gif",
+    "fixed_width_small_width": "100",
+    "fixed_width_small_height": "75",
+    "caption": ""
+  },
+  "meta": {
+    "status": 200,
+    "msg": "OK",
+    "response_id": "5ca004cd4435657532c70c28"
+  }
+}

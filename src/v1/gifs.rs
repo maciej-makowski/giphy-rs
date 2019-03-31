@@ -1,5 +1,5 @@
 use std::default::Default;
-pub use super::model::{SearchResponse, TrendingResponse, TranslateResponse, GiphyRequest};
+pub use super::model::{SearchResponse, TrendingResponse, TranslateResponse, RandomResponse, GiphyRequest};
 
 /// [Search endpoint] request
 /// 
@@ -130,6 +130,47 @@ impl <'p> GiphyRequest<TranslateResponse> for TranslateRequest<'p> {
     }
 }
 
+/// Giphy [Random endpoint] request
+///
+/// [Random endpoint]: https://developers.giphy.com/docs/#path--gifs-random
+#[derive(Serialize, Default)]
+pub struct RandomRequest<'a, 'b> {
+    pub(crate) tag: Option<&'a str>,
+
+    pub(crate) rating: Option<&'b str>,
+}
+
+impl <'a, 'b> RandomRequest<'a, 'b> {
+    /// Creates new [Random endpoint] request
+    ///
+    /// [Random endpoint]: https://developers.giphy.com/docs/#path--gifs-random
+    pub fn new() -> RandomRequest<'a, 'b> {
+        Default::default()
+    }
+
+    /// Filters [Random] request by specific tag
+    ///
+    /// [Random]: https://developers.giphy.com/docs/#path--gifs-random
+    pub fn with_tag(mut self, value: &'a str) -> Self {
+        self.tag = Some(value);
+        self
+    }
+
+    /// Filters [Random] request by specific rating
+    ///
+    /// [Random]: https://developers.giphy.com/docs/#path--gifs-random
+    pub fn with_rating(mut self, value: &'b str) -> Self {
+        self.rating = Some(value);
+        self
+    }
+}
+
+impl <'a, 'b> GiphyRequest<RandomResponse> for RandomRequest<'a, 'b> {
+    fn get_endpoint(&self) -> &'static str {
+        "v1/gifs/random"
+    }
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -168,4 +209,16 @@ mod test {
         assert_eq!(req.phrase, "rage");
         assert_eq!(req.weirdness, Some(10));
     }
+
+    #[test]
+    fn random_request() {
+        let req = RandomRequest::new()
+            .with_tag("burrito")
+            .with_rating("g");
+
+        assert_eq!(req.get_endpoint(), "v1/gifs/random");
+        assert_eq!(req.tag, Some("burrito"));
+        assert_eq!(req.rating, Some("g"));
+    }
 }
+

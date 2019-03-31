@@ -129,5 +129,29 @@ mod test {
 
         assert!(response.meta.status == 200);
     }
+
+    #[test]
+    fn api_random_200_ok() {
+        dotenv().ok();
+        let api_key = env::var("GIPHY_API_KEY_TEST")
+            .unwrap_or_else(|e| panic!("Error retrieving env variable: {:?}", e));
+        let api_root = server_url();
+        let _m = mock(
+            "GET",
+            Matcher::Regex(r"/gifs/random.*api_key=.+".to_string()),
+        )
+        .with_status(200)
+        .with_body_from_file("data/example-random-response.json")
+        .create();
+
+        let client = reqwest::Client::new();
+        let api = SyncApi::new(api_root, api_key, client);
+
+        let response = v1::gifs::RandomRequest::new()
+            .send_to(&api)
+            .unwrap_or_else(|e| panic!("Error while calling search endpoint: {:?}", e));
+
+        assert!(response.meta.status == 200);
+    }
 }
 
