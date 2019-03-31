@@ -19,11 +19,11 @@ pub fn main() {
         .send_to(&api)
         .map(|response| {
             println!("Response: {:?}", response);
-            ()
+            std::process::exit(0)
         })
         .map_err(|e| {
             println!("Error: {:?}", e);
-            ()
+            std::process::exit(1)
         });
 
     tokio::run(test_fut);
