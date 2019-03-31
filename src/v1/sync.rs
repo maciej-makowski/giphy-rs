@@ -1,6 +1,6 @@
 use serde::de::DeserializeOwned;
 
-use super::model::GiphyRequest;
+use super::model::{GiphyRequest, API_ROOT};
 
 /// Implementation of Giphy API that uses synchronous [`reqwest::Client`]
 ///
@@ -13,12 +13,12 @@ pub struct SyncApi {
 
 impl SyncApi {
     /// Creates a new synchronous Giphy API Client
-    pub fn new(url: String, key: String, client: reqwest::Client) -> SyncApi {
-        SyncApi {
-            url: url,
-            key: key,
-            client: client,
-        }
+    pub fn new(key: String, client: reqwest::Client) -> SyncApi {
+        SyncApi { url: API_ROOT.to_string(), key, client }
+    }
+
+    pub fn new_with_url(url: String, key: String, client: reqwest::Client) -> SyncApi {
+        SyncApi { url, key, client }
     }
 }
 
@@ -74,7 +74,7 @@ mod test {
         .create();
 
         let client = reqwest::Client::new();
-        let api = SyncApi::new(api_root, api_key, client);
+        let api = SyncApi::new_with_url(api_root, api_key, client);
 
         let response = v1::gifs::SearchRequest::new("rage")
             .send_to(&api)
@@ -98,7 +98,7 @@ mod test {
         .create();
 
         let client = reqwest::Client::new();
-        let api = SyncApi::new(api_root, api_key, client);
+        let api = SyncApi::new_with_url(api_root, api_key, client);
 
         let response = v1::gifs::TrendingRequest::new()
             .send_to(&api)
@@ -122,7 +122,7 @@ mod test {
         .create();
 
         let client = reqwest::Client::new();
-        let api = SyncApi::new(api_root, api_key, client);
+        let api = SyncApi::new_with_url(api_root, api_key, client);
 
         let response = v1::gifs::TranslateRequest::new("rage")
             .send_to(&api)
@@ -146,7 +146,7 @@ mod test {
         .create();
 
         let client = reqwest::Client::new();
-        let api = SyncApi::new(api_root, api_key, client);
+        let api = SyncApi::new_with_url(api_root, api_key, client);
 
         let response = v1::gifs::RandomRequest::new()
             .send_to(&api)
@@ -170,7 +170,7 @@ mod test {
         .create();
 
         let client = reqwest::Client::new();
-        let api = SyncApi::new(api_root, api_key, client);
+        let api = SyncApi::new_with_url(api_root, api_key, client);
 
         let response = v1::gifs::GetGifRequest::new("xT4uQulxzV39haRFjG")
             .send_to(&api)
@@ -194,7 +194,7 @@ mod test {
         .create();
 
         let client = reqwest::Client::new();
-        let api = SyncApi::new(api_root, api_key, client);
+        let api = SyncApi::new_with_url(api_root, api_key, client);
 
         let response =
             v1::gifs::GetGifsRequest::new(vec!["xT4uQulxzV39haRFjG", "3og0IPxMM0erATueVW"])

@@ -1,11 +1,21 @@
-//! [Giphy API] wrapper for Rust
+//! # [Giphy] API wrapper for Rust
 //!
-//! The library provides both synchronous and asynchronous API wrappers. It uses [`reqwest`] crate
-//! for making the HTTP requests.
+//! The library provides a wrapper for [Giphy HTTP API].
+//! 
+//! ## Features
+//! Version `0.3.0` is features complete and implements all the methods for searching
+//! and retrieving GIFs from [Giphy] using `v1` API. Both synchronous and asynchronous
+//! styles are supported by the library.
+//! 
+//! Stickers and posting GIFs to [Giphy] is currently not supported.
+//! 
+//! ## Examples
+//! 
+//! 
 //!
-//! See [`v1`] module for Giphy v1 API wrapper
-//!
+//! [Giphy]: https://giphy.com
 //! [Giphy API]: https://developers.giphy.com/docs/
+//! [Giphy HTTP API]: https://developers.giphy.com/docs/
 //! [`reqwest`]: https://docs.rs/reqwest
 //! [`v1`]: ./v1/index.html
 
