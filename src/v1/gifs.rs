@@ -17,7 +17,7 @@ pub struct SearchRequest<'p> {
 impl<'p> SearchRequest<'p> {
     /// Creates new [Search endpoint] request
     ///
-    /// [Search endpoint]: https://developers.giphy.com/docs/api/
+    /// [Search endpoint]: https://developers.giphy.com/docs/api/endpoint#search
     pub fn new(query: &'p str) -> SearchRequest<'p> {
         SearchRequest {
             query,
@@ -28,7 +28,7 @@ impl<'p> SearchRequest<'p> {
 
     /// Limits the maximum number of GIF objects returned from [Search] request
     ///
-    /// [Search]: https://developers.giphy.com/docs/api/
+    /// [Search]: https://developers.giphy.com/docs/api/endpoint#search
     pub fn with_limit(mut self, value: u32) -> Self {
         self.limit = Some(value);
         self
@@ -36,7 +36,7 @@ impl<'p> SearchRequest<'p> {
 
     /// Specifies the number of GIF objects to skip when making [Search] request
     ///
-    /// [Search]: https://developers.giphy.com/docs/api/
+    /// [Search]: https://developers.giphy.com/docs/api/endpoint#search
     pub fn with_offset(mut self, value: u32) -> Self {
         self.offset = Some(value);
         self
@@ -51,7 +51,7 @@ impl<'p> GiphyRequest<PaginatedGifListResponse> for SearchRequest<'p> {
 
 /// Giphy [Trending endpoint] request
 ///
-/// [Trending endpoint]: https://developers.giphy.com/docs/api/
+/// [Trending endpoint]: https://developers.giphy.com/docs/api/endpoint#trending
 #[derive(Serialize, Default)]
 pub struct TrendingRequest<'a> {
     pub(crate) rating: Option<&'a str>,
@@ -64,14 +64,14 @@ pub struct TrendingRequest<'a> {
 impl<'a> TrendingRequest<'a> {
     /// Creates new [Trending endpoint] request
     ///
-    /// [Trending endpoint]: https://developers.giphy.com/docs/api/
+    /// [Trending endpoint]: https://developers.giphy.com/docs/api/endpoint#trending
     pub fn new() -> TrendingRequest<'a> {
         Default::default()
     }
 
     /// Specifies the rating of GIF objects returned from [Trending] request
     ///
-    /// [Trending]: https://developers.giphy.com/docs/api/
+    /// [Trending]: https://developers.giphy.com/docs/api/endpoint#trending
     pub fn with_rating<'b: 'a>(mut self, rating: &'b str) -> Self {
         self.rating = Some(rating);
         self
@@ -79,7 +79,7 @@ impl<'a> TrendingRequest<'a> {
 
     /// Limits the maximum number of GIF objects returned from [Trending] request
     ///
-    /// [Trending]: https://developers.giphy.com/docs/api/
+    /// [Trending]: https://developers.giphy.com/docs/api/endpoint#trending
     pub fn with_limit(mut self, limit: u32) -> Self {
         self.limit = Some(limit);
         self
@@ -87,7 +87,7 @@ impl<'a> TrendingRequest<'a> {
 
     /// Specifies the number of GIF objects to skip when making [Trending] request
     ///
-    /// [Trending]: https://developers.giphy.com/docs/api/
+    /// [Trending]: https://developers.giphy.com/docs/api/endpoint#trending
     pub fn with_offset(mut self, offset: u32) -> Self {
         self.offset = Some(offset);
         self
@@ -102,7 +102,7 @@ impl<'p> GiphyRequest<PaginatedGifListResponse> for TrendingRequest<'p> {
 
 /// Giphy [Translate endpoint] request
 ///
-/// [Translate endpoint]: https://developers.giphy.com/docs/api/
+/// [Translate endpoint]: https://developers.giphy.com/docs/api/endpoint#translate
 #[derive(Serialize, Default)]
 pub struct TranslateRequest<'a> {
     #[serde(rename = "s")]
@@ -114,7 +114,7 @@ pub struct TranslateRequest<'a> {
 impl<'a> TranslateRequest<'a> {
     /// Creates new [Translate endpoint] request
     ///
-    /// [Translate endpoint]: https://developers.giphy.com/docs/api/
+    /// [Translate endpoint]: https://developers.giphy.com/docs/api/endpoint#translate
     pub fn new(phrase: &'a str) -> TranslateRequest {
         TranslateRequest {
             phrase,
@@ -124,7 +124,7 @@ impl<'a> TranslateRequest<'a> {
 
     /// Specifies the weirdness value for [Translate] request
     ///
-    /// [Translate]: https://developers.giphy.com/docs/api/
+    /// [Translate]: https://developers.giphy.com/docs/api/endpoint#translate
     pub fn with_weirdness(mut self, value: u8) -> Self {
         self.weirdness = Some(value);
         self
@@ -150,14 +150,14 @@ pub struct RandomRequest<'a, 'b> {
 impl<'a, 'b> RandomRequest<'a, 'b> {
     /// Creates new [Random endpoint] request
     ///
-    /// [Random endpoint]: https://developers.giphy.com/docs/api/
+    /// [Random endpoint]: https://developers.giphy.com/docs/api/endpoint#random
     pub fn new() -> RandomRequest<'a, 'b> {
         Default::default()
     }
 
     /// Filters [Random] request by specific tag
     ///
-    /// [Random]: https://developers.giphy.com/docs/api/
+    /// [Random]: https://developers.giphy.com/docs/api/endpoint#random
     pub fn with_tag(mut self, value: &'a str) -> Self {
         self.tag = Some(value);
         self
@@ -165,7 +165,7 @@ impl<'a, 'b> RandomRequest<'a, 'b> {
 
     /// Filters [Random] request by specific rating
     ///
-    /// [Random]: https://developers.giphy.com/docs/api/
+    /// [Random]: https://developers.giphy.com/docs/api/endpoint#random
     pub fn with_rating(mut self, value: &'b str) -> Self {
         self.rating = Some(value);
         self
@@ -180,7 +180,7 @@ impl<'a, 'b> GiphyRequest<SingleGifResponse> for RandomRequest<'a, 'b> {
 
 /// Giphy [GIF by id endpoint] request
 ///
-/// [GIF by id endpoint]: https://developers.giphy.com/docs/api/
+/// [GIF by id endpoint]: https://developers.giphy.com/docs/api/endpoint#get-gif-by-id
 #[derive(Serialize)]
 pub struct GetGifRequest {
     #[serde(skip)]
@@ -190,7 +190,7 @@ pub struct GetGifRequest {
 impl GetGifRequest {
     /// Created new [GIF by id] request
     ///
-    /// [GIF by id]: https://developers.giphy.com/docs/api/
+    /// [GIF by id]: https://developers.giphy.com/docs/api/endpoint#get-gif-by-id
     pub fn new(gif_id: &str) -> GetGifRequest {
         GetGifRequest {
             endpoint: format!("v1/gifs/{}", gif_id),
@@ -206,7 +206,7 @@ impl GiphyRequest<SingleGifResponse> for GetGifRequest {
 
 /// Giphy [GIFs by id endpoint] request
 ///
-/// [GIFs by id endpoint]: https://developers.giphy.com/docs/api/
+/// [GIFs by id endpoint]: https://developers.giphy.com/docs/api/endpoint#get-gif-by-id
 #[derive(Serialize)]
 pub struct GetGifsRequest {
     pub(crate) ids: String,
@@ -215,7 +215,7 @@ pub struct GetGifsRequest {
 impl GetGifsRequest {
     /// Created new [GIFs by id] request
     ///
-    /// [GIFs by id endpoint]: https://developers.giphy.com/docs/api/
+    /// [GIFs by id]: https://developers.giphy.com/docs/api/endpoint#get-gif-by-id
     pub fn new(ids: Vec<&str>) -> GetGifsRequest {
         GetGifsRequest { ids: ids.join(",") }
     }
