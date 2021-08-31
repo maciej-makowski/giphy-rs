@@ -87,8 +87,8 @@
 //! ```
 //!
 //! [Giphy]: https://giphy.com
-//! [Giphy API]: https://developers.giphy.com/docs/
-//! [Giphy HTTP API]: https://developers.giphy.com/docs/
+//! [Giphy API]: https://developers.giphy.com/docs/api/
+//! [Giphy HTTP API]: https://developers.giphy.com/docs/api/
 //! [`reqwest`]: https://docs.rs/reqwest
 //! [`v1`]: ./v1/index.html
 //! [`reqwest::Client`]: ../reqwest/struct.Client.html

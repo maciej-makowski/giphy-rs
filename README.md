@@ -28,4 +28,4 @@ See [Crate documentation] and [examples]
 [Crate documentation]: https://docs.rs/giphy
 [examples]: ./examples
 [Giphy]: https://giphy.com/
-[Giphy HTTP API]: https://developers.giphy.com/docs
+[Giphy HTTP API]: https://developers.giphy.com/docs/api/
