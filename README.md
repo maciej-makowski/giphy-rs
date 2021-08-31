@@ -1,7 +1,7 @@
 # [Giphy] library for Rust
 
 [![](https://meritbadge.herokuapp.com/giphy)](https://crates.io/crates/giphy)
-[![Build Status](https://travis-ci.org/cfiet/giphy-rs.svg?branch=master)](https://travis-ci.org/cfiet/giphy-rs)
+[![Build Status](https://travis-ci.com/cfiet/giphy-rs.svg?branch=master)](https://travis-ci.org/cfiet/giphy-rs)
 
 This library provides Rust wrapper for [Giphy HTTP API]
 
