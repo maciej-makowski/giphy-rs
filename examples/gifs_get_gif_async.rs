@@ -16,6 +16,6 @@ pub async fn main() {
         .send_to(&api)
         .await
         .unwrap();
-    
+
     println!("Response: {:?}", response);
 }

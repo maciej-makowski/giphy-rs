@@ -1,6 +1,6 @@
 use super::model::{GiphyRequest, API_ROOT};
-use futures::TryFutureExt;
 use futures::future::BoxFuture;
+use futures::TryFutureExt;
 use serde::de::DeserializeOwned;
 use std::marker::Send;
 
@@ -16,14 +16,22 @@ pub struct AsyncApi {
 impl AsyncApi {
     /// Creates a new Giphy API Client
     pub fn new(key: String, client: reqwest::Client) -> AsyncApi {
-        AsyncApi { url: API_ROOT.to_string(), key, client }
+        AsyncApi {
+            url: API_ROOT.to_string(),
+            key,
+            client,
+        }
     }
 
     /// Creates a new Giphy API Client with a custom API root
-    /// 
+    ///
     /// Useful for testing against API mocks
     pub fn new_with_url(api_root_url: String, key: String, client: reqwest::Client) -> AsyncApi {
-        AsyncApi { url: api_root_url, key, client }
+        AsyncApi {
+            url: api_root_url,
+            key,
+            client,
+        }
     }
 }
 
@@ -31,10 +39,7 @@ pub trait RunnableAsyncRequest<ResponseType> {
     /// Sends a request to an [AsyncApi]
     ///
     /// [SyncApi]: ./struct.AsyncApi.html
-    fn send_to(
-        &self,
-        api: &AsyncApi,
-    ) -> BoxFuture<'static, Result<ResponseType, reqwest::Error>>;
+    fn send_to(&self, api: &AsyncApi) -> BoxFuture<'static, Result<ResponseType, reqwest::Error>>;
 }
 
 impl<'a, RequestType, ResponseType> RunnableAsyncRequest<ResponseType> for RequestType
@@ -42,10 +47,7 @@ where
     RequestType: GiphyRequest<ResponseType>,
     ResponseType: DeserializeOwned + Send + 'static,
 {
-    fn send_to(
-        &self,
-        api: &AsyncApi,
-    ) -> BoxFuture<'static, Result<ResponseType, reqwest::Error>> {
+    fn send_to(&self, api: &AsyncApi) -> BoxFuture<'static, Result<ResponseType, reqwest::Error>> {
         let endpoint = format!("{}/{}", api.url, self.get_endpoint());
 
         let future = api
@@ -114,7 +116,7 @@ mod test {
             .send_to(&api)
             .await
             .unwrap();
-        
+
         assert!(response.pagination.count > 0);
     }
 
@@ -160,10 +162,7 @@ mod test {
         let client = reqwest::Client::new();
         let api = AsyncApi::new_with_url(api_root, api_key, client);
 
-        let response = v1::gifs::RandomRequest::new()
-            .send_to(&api)
-            .await
-            .unwrap();
+        let response = v1::gifs::RandomRequest::new().send_to(&api).await.unwrap();
 
         assert!(response.meta.status == 200);
     }
