@@ -3,9 +3,9 @@
 //! The library provides a wrapper for [Giphy HTTP API].
 //! 
 //! ## Features
-//! Version `0.3.0` is features complete and implements all the methods for searching
-//! and retrieving GIFs from [Giphy] using `v1` API. Both synchronous and asynchronous
-//! styles are supported by the library.
+//! Version `0.4.0` is modern-Rust implementation providing all the methods for
+//! searching and retrieving GIFs from [Giphy] using `v1` API. Both synchronous
+//! and asynchronous styles are supported by the library.
 //! 
 //! Stickers and posting GIFs to [Giphy] is currently not supported.
 //! 
