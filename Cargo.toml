@@ -1,6 +1,6 @@
 [package]
 name = "giphy"
-version = "0.4.0"
+version = "0.4.1"
 description = "Giphy API wrapper for Rust"
 authors = ["Maciej Makowski <maciejm.github(at)cfiet.net>"]
 edition = "2018"
