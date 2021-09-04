@@ -4,20 +4,20 @@ use super::model::{GiphyRequest, API_ROOT};
 
 /// Implementation of Giphy API that uses synchronous [`reqwest::Client`]
 ///
-/// [`reqwest::Client`]: https://docs.rs/reqwest/0.9.12/reqwest/struct.Client.html
+/// [`reqwest::Client`]: https://docs.rs/reqwest/0.11.4/reqwest/blocking/struct.Client.html
 pub struct SyncApi {
     url: String,
     key: String,
-    client: reqwest::Client,
+    client: reqwest::blocking::Client,
 }
 
 impl SyncApi {
     /// Creates a new synchronous Giphy API Client
-    pub fn new(key: String, client: reqwest::Client) -> SyncApi {
+    pub fn new(key: String, client: reqwest::blocking::Client) -> SyncApi {
         SyncApi { url: API_ROOT.to_string(), key, client }
     }
 
-    pub fn new_with_url(url: String, key: String, client: reqwest::Client) -> SyncApi {
+    pub fn new_with_url(url: String, key: String, client: reqwest::blocking::Client) -> SyncApi {
         SyncApi { url, key, client }
     }
 }
@@ -73,7 +73,7 @@ mod test {
         .with_body_from_file("data/example-search-response.json")
         .create();
 
-        let client = reqwest::Client::new();
+        let client = reqwest::blocking::Client::new();
         let api = SyncApi::new_with_url(api_root, api_key, client);
 
         let response = v1::gifs::SearchRequest::new("rage")
@@ -97,7 +97,7 @@ mod test {
         .with_body_from_file("data/example-trending-response.json")
         .create();
 
-        let client = reqwest::Client::new();
+        let client = reqwest::blocking::Client::new();
         let api = SyncApi::new_with_url(api_root, api_key, client);
 
         let response = v1::gifs::TrendingRequest::new()
@@ -121,7 +121,7 @@ mod test {
         .with_body_from_file("data/example-translate-response.json")
         .create();
 
-        let client = reqwest::Client::new();
+        let client = reqwest::blocking::Client::new();
         let api = SyncApi::new_with_url(api_root, api_key, client);
 
         let response = v1::gifs::TranslateRequest::new("rage")
@@ -145,7 +145,7 @@ mod test {
         .with_body_from_file("data/example-random-response.json")
         .create();
 
-        let client = reqwest::Client::new();
+        let client = reqwest::blocking::Client::new();
         let api = SyncApi::new_with_url(api_root, api_key, client);
 
         let response = v1::gifs::RandomRequest::new()
@@ -169,7 +169,7 @@ mod test {
         .with_body_from_file("data/example-get-gif-response.json")
         .create();
 
-        let client = reqwest::Client::new();
+        let client = reqwest::blocking::Client::new();
         let api = SyncApi::new_with_url(api_root, api_key, client);
 
         let response = v1::gifs::GetGifRequest::new("xT4uQulxzV39haRFjG")
@@ -193,7 +193,7 @@ mod test {
         .with_body_from_file("data/example-get-gifs-response.json")
         .create();
 
-        let client = reqwest::Client::new();
+        let client = reqwest::blocking::Client::new();
         let api = SyncApi::new_with_url(api_root, api_key, client);
 
         let response =

@@ -1,27 +1,28 @@
 use super::model::{GiphyRequest, API_ROOT};
-use futures::Future;
+use futures::TryFutureExt;
+use futures::future::BoxFuture;
 use serde::de::DeserializeOwned;
 use std::marker::Send;
 
 /// Implementation of Giphy API that uses asynchronous [`reqwest::async::Client`]
 ///
-/// [`reqwest::async::Client`]: https://docs.rs/reqwest/0.9.12/reqwest/async/struct.Client.html
+/// [`reqwest::async::Client`]: https://docs.rs/reqwest/0.11.4/reqwest/struct.Client.html
 pub struct AsyncApi {
     url: String,
     key: String,
-    client: reqwest::r#async::Client,
+    client: reqwest::Client,
 }
 
 impl AsyncApi {
     /// Creates a new Giphy API Client
-    pub fn new(key: String, client: reqwest::r#async::Client) -> AsyncApi {
+    pub fn new(key: String, client: reqwest::Client) -> AsyncApi {
         AsyncApi { url: API_ROOT.to_string(), key, client }
     }
 
     /// Creates a new Giphy API Client with a custom API root
     /// 
     /// Useful for testing against API mocks
-    pub fn new_with_url(api_root_url: String, key: String, client: reqwest::r#async::Client) -> AsyncApi {
+    pub fn new_with_url(api_root_url: String, key: String, client: reqwest::Client) -> AsyncApi {
         AsyncApi { url: api_root_url, key, client }
     }
 }
@@ -33,18 +34,18 @@ pub trait RunnableAsyncRequest<ResponseType> {
     fn send_to(
         &self,
         api: &AsyncApi,
-    ) -> Box<dyn Future<Item = ResponseType, Error = reqwest::Error> + Send>;
+    ) -> BoxFuture<'static, Result<ResponseType, reqwest::Error>>;
 }
 
 impl<'a, RequestType, ResponseType> RunnableAsyncRequest<ResponseType> for RequestType
 where
     RequestType: GiphyRequest<ResponseType>,
-    ResponseType: 'static + DeserializeOwned + Send,
+    ResponseType: DeserializeOwned + Send + 'static,
 {
     fn send_to(
         &self,
         api: &AsyncApi,
-    ) -> Box<dyn Future<Item = ResponseType, Error = reqwest::Error> + Send> {
+    ) -> BoxFuture<'static, Result<ResponseType, reqwest::Error>> {
         let endpoint = format!("{}/{}", api.url, self.get_endpoint());
 
         let future = api
@@ -53,10 +54,9 @@ where
             .query(&[("api_key", &api.key)])
             .query(&self)
             .send()
-            .and_then(reqwest::r#async::Response::error_for_status)
-            .and_then(|mut response| response.json::<ResponseType>());
+            .and_then(|response| response.json::<ResponseType>());
 
-        Box::new(future)
+        Box::pin(future)
     }
 }
 
@@ -67,10 +67,9 @@ mod test {
     use dotenv::dotenv;
     use mockito::{mock, server_url, Matcher};
     use std::env;
-    use tokio::runtime::current_thread;
 
-    #[test]
-    fn api_search_200_ok() {
+    #[tokio::test]
+    async fn api_search_200_ok() {
         dotenv().ok();
         let api_key = env::var("GIPHY_API_KEY_TEST")
             .unwrap_or_else(|e| panic!("Error retrieving env variable: {:?}", e));
@@ -83,21 +82,19 @@ mod test {
         .with_body_from_file("data/example-search-response.json")
         .create();
 
-        let client = reqwest::r#async::Client::new();
+        let client = reqwest::Client::new();
         let api = AsyncApi::new_with_url(api_root, api_key, client);
 
-        let test_fut = v1::gifs::SearchRequest::new("rage")
+        let response = v1::gifs::SearchRequest::new("rage")
             .send_to(&api)
-            .map(|response| {
-                assert!(response.pagination.count > 0);
-            })
-            .map_err(|e| panic!("Error while calling search endpoint: {:?}", e));
+            .await
+            .unwrap();
 
-        current_thread::run(test_fut);
+        assert!(response.pagination.count > 0);
     }
 
-    #[test]
-    fn api_trending_200_ok() {
+    #[tokio::test]
+    async fn api_trending_200_ok() {
         dotenv().ok();
         let api_key = env::var("GIPHY_API_KEY_TEST")
             .unwrap_or_else(|e| panic!("Error retrieving env variable: {:?}", e));
@@ -110,21 +107,19 @@ mod test {
         .with_body_from_file("data/example-trending-response.json")
         .create();
 
-        let client = reqwest::r#async::Client::new();
+        let client = reqwest::Client::new();
         let api = AsyncApi::new_with_url(api_root, api_key, client);
 
-        let test_fut = v1::gifs::TrendingRequest::new()
+        let response = v1::gifs::TrendingRequest::new()
             .send_to(&api)
-            .map(|response| {
-                assert!(response.pagination.count > 0);
-            })
-            .map_err(|e| panic!("Error while calling search endpoint: {:?}", e));
-
-        current_thread::run(test_fut);
+            .await
+            .unwrap();
+        
+        assert!(response.pagination.count > 0);
     }
 
-    #[test]
-    fn api_translate_200_ok() {
+    #[tokio::test]
+    async fn api_translate_200_ok() {
         dotenv().ok();
         let api_key = env::var("GIPHY_API_KEY_TEST")
             .unwrap_or_else(|e| panic!("Error retrieving env variable: {:?}", e));
@@ -137,21 +132,19 @@ mod test {
         .with_body_from_file("data/example-translate-response.json")
         .create();
 
-        let client = reqwest::r#async::Client::new();
+        let client = reqwest::Client::new();
         let api = AsyncApi::new_with_url(api_root, api_key, client);
 
-        let test_fut = v1::gifs::TranslateRequest::new("rage")
+        let response = v1::gifs::TranslateRequest::new("rage")
             .send_to(&api)
-            .map(|response| {
-                assert!(response.meta.status == 200);
-            })
-            .map_err(|e| panic!("Error while calling search endpoint: {:?}", e));
+            .await
+            .unwrap();
 
-        current_thread::run(test_fut);
+        assert!(response.meta.status == 200);
     }
 
-    #[test]
-    fn api_random_200_ok() {
+    #[tokio::test]
+    async fn api_random_200_ok() {
         dotenv().ok();
         let api_key = env::var("GIPHY_API_KEY_TEST")
             .unwrap_or_else(|e| panic!("Error retrieving env variable: {:?}", e));
@@ -164,21 +157,19 @@ mod test {
         .with_body_from_file("data/example-random-response.json")
         .create();
 
-        let client = reqwest::r#async::Client::new();
+        let client = reqwest::Client::new();
         let api = AsyncApi::new_with_url(api_root, api_key, client);
 
-        let test_fut = v1::gifs::RandomRequest::new()
+        let response = v1::gifs::RandomRequest::new()
             .send_to(&api)
-            .map(|response| {
-                assert!(response.meta.status == 200);
-            })
-            .map_err(|e| panic!("Error while calling search endpoint: {:?}", e));
+            .await
+            .unwrap();
 
-        current_thread::run(test_fut);
+        assert!(response.meta.status == 200);
     }
 
-    #[test]
-    fn api_get_gif_200_ok() {
+    #[tokio::test]
+    async fn api_get_gif_200_ok() {
         dotenv().ok();
         let api_key = env::var("GIPHY_API_KEY_TEST")
             .unwrap_or_else(|e| panic!("Error retrieving env variable: {:?}", e));
@@ -191,21 +182,19 @@ mod test {
         .with_body_from_file("data/example-get-gif-response.json")
         .create();
 
-        let client = reqwest::r#async::Client::new();
+        let client = reqwest::Client::new();
         let api = AsyncApi::new_with_url(api_root, api_key, client);
 
-        let test_fut = v1::gifs::GetGifRequest::new("xT4uQulxzV39haRFjG")
+        let response = v1::gifs::GetGifRequest::new("xT4uQulxzV39haRFjG")
             .send_to(&api)
-            .map(|response| {
-                assert!(response.meta.status == 200);
-            })
-            .map_err(|e| panic!("Error while calling search endpoint: {:?}", e));
+            .await
+            .unwrap();
 
-        current_thread::run(test_fut);
+        assert!(response.meta.status == 200);
     }
 
-    #[test]
-    fn api_get_gifs_200_ok() {
+    #[tokio::test]
+    async fn api_get_gifs_200_ok() {
         dotenv().ok();
         let api_key = env::var("GIPHY_API_KEY_TEST")
             .unwrap_or_else(|e| panic!("Error retrieving env variable: {:?}", e));
@@ -218,17 +207,15 @@ mod test {
         .with_body_from_file("data/example-get-gifs-response.json")
         .create();
 
-        let client = reqwest::r#async::Client::new();
+        let client = reqwest::Client::new();
         let api = AsyncApi::new_with_url(api_root, api_key, client);
 
-        let test_fut =
+        let response =
             v1::gifs::GetGifsRequest::new(vec!["xT4uQulxzV39haRFjG", "3og0IPxMM0erATueVW"])
                 .send_to(&api)
-                .map(|response| {
-                    assert!(response.meta.status == 200);
-                })
-                .map_err(|e| panic!("Error while calling search endpoint: {:?}", e));
+                .await
+                .unwrap();
 
-        current_thread::run(test_fut);
+        assert!(response.meta.status == 200);
     }
 }

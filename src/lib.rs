@@ -11,12 +11,12 @@
 //! 
 //! ## Examples
 //! ### Synchronous API
-//! Create a synchronous [`reqwest::Client`] and [`SyncApi`] object holding your API key
+//! Create a synchronous [`reqwest::blocking::Client`] and [`SyncApi`] object holding your API key
 //! 
 //! ```
 //! use giphy::v1::sync::*;
 //! 
-//! let client = reqwest::Client::new();
+//! let client = reqwest::blocking::Client::new();
 //! let api = SyncApi::new("[your Giphy API key]".to_string(), client);
 //! ```
 //! 
@@ -28,7 +28,7 @@
 //! ```no_run
 //! # use giphy::v1::sync::*;
 //! use giphy::v1::gifs::SearchRequest;
-//! # let client = reqwest::Client::new();
+//! # let client = reqwest::blocking::Client::new();
 //! # let api = SyncApi::new("[your Giphy API key]".to_string(), client);
 //! 
 //! let response = SearchRequest::new("tacos")  // Create search request
@@ -51,7 +51,7 @@
 //! ```
 //! use giphy::v1::r#async::*;
 //! 
-//! let client = reqwest::r#async::Client::new();
+//! let client = reqwest::Client::new();
 //! let api = AsyncApi::new("[your Giphy API key]".to_string(), client);
 //! ```
 //! 
@@ -60,21 +60,23 @@
 //! with [`AsyncApi`].
 //! 
 //! ```no_run
-//! use futures::future::Future;
 //! # use giphy::v1::r#async::*;
 //! use giphy::v1::gifs::SearchRequest;
-//! # let client = reqwest::r#async::Client::new();
-//! # let api = AsyncApi::new("[your Giphy API key]".to_string(), client);
-//! // Create search request the same way as with synchronous api
-//! let search_fut = SearchRequest::new("tacos")
+//! 
+//! #[tokio::main]
+//! async fn main() {
+//!   # let client = reqwest::Client::new();
+//!   # let api = AsyncApi::new("[your Giphy API key]".to_string(), client);
+//!   // Create search request the same way as with synchronous api
+//!   let response = SearchRequest::new("tacos")
 //!     .with_limit(10)
 //!     .send_to(&api) // Send the request using AsyncApi, this returns a Future
-//!     .map(|response| {
-//!         // Operate on response
-//!         println!("Response: {:?}", response);
-//!     });
+//!     .await
+//!     .unwrap();
+//! 
+//!   println!("Response: {:?}", response);
+//! }
 //! ```
-//! The `search_fut` can then be run with [`tokio`]. 
 //! 
 //! ### More examples
 //! See [examples] for showcase of all the currently possible [Giphy HTTP API]
