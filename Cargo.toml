@@ -5,13 +5,13 @@ description = "Giphy API wrapper for Rust"
 authors = ["Maciej Makowski <maciejm.github(at)cfiet.net>"]
 edition = "2018"
 license = "MIT"
-repository = "https://github.com/cfiet/giphy-rs"
+repository = "https://github.com/maciej-makowski/giphy-rs"
 keywords = ["giphy", "gif", "api", "rest", "http"]
 categories = ["api-bindings"]
 readme = "README.md"
 
 [badges]
-travis-ci = { repository = "cfiet/giphy-rs", branch = "master" }
+travis-ci = { repository = "maciej-makowski/giphy-rs", branch = "master" }
 
 [dependencies]
 futures = "0.3.17"
