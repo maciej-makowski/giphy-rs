@@ -7,7 +7,7 @@ This library provides Rust wrapper for [Giphy HTTP API]
 
 ## Features
 
-Version `0.3.0` is feature complete and allows to search and retrieve GIFs from [Giphy] both in
+Version `0.4.0` is feature complete and allows to search and retrieve GIFs from [Giphy] both in
 synchronous and asynchronous style. See [Crate documentation] and examples for details.
 Stickers API and posting GIFs is currently not supported. 
 
