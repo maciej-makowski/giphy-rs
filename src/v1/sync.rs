@@ -14,7 +14,11 @@ pub struct SyncApi {
 impl SyncApi {
     /// Creates a new synchronous Giphy API Client
     pub fn new(key: String, client: reqwest::blocking::Client) -> SyncApi {
-        SyncApi { url: API_ROOT.to_string(), key, client }
+        SyncApi {
+            url: API_ROOT.to_string(),
+            key,
+            client,
+        }
     }
 
     pub fn new_with_url(url: String, key: String, client: reqwest::blocking::Client) -> SyncApi {

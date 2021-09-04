@@ -12,10 +12,7 @@ pub async fn main() {
     let client = reqwest::Client::new();
     let api = AsyncApi::new(api_key, client);
 
-    let response = RandomRequest::new()
-        .send_to(&api)
-        .await
-        .unwrap();
-    
+    let response = RandomRequest::new().send_to(&api).await.unwrap();
+
     println!("Response: {:?}", response);
 }
