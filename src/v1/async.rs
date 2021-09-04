@@ -33,7 +33,7 @@ pub trait RunnableAsyncRequest<ResponseType> {
     fn send_to(
         &self,
         api: &AsyncApi,
-    ) -> Box<Future<Item = ResponseType, Error = reqwest::Error> + Send>;
+    ) -> Box<dyn Future<Item = ResponseType, Error = reqwest::Error> + Send>;
 }
 
 impl<'a, RequestType, ResponseType> RunnableAsyncRequest<ResponseType> for RequestType
@@ -44,7 +44,7 @@ where
     fn send_to(
         &self,
         api: &AsyncApi,
-    ) -> Box<Future<Item = ResponseType, Error = reqwest::Error> + Send> {
+    ) -> Box<dyn Future<Item = ResponseType, Error = reqwest::Error> + Send> {
         let endpoint = format!("{}/{}", api.url, self.get_endpoint());
 
         let future = api
