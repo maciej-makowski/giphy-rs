@@ -1,6 +1,6 @@
 # [Giphy] library for Rust
 
-[![](https://img.shields.io/crates/v/giphy.svg)](https://crates.io/crates/giphy)
+[![crates.io](https://img.shields.io/crates/v/giphy.svg)](https://crates.io/crates/giphy)
 [![Build Status](https://travis-ci.com/maciej-makowski/giphy-rs.svg?branch=master)](https://travis-ci.com/cfiet/giphy-rs)
 
 This library provides Rust wrapper for [Giphy HTTP API]
