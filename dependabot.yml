@@ -4,6 +4,8 @@ updates:
   - package-ecosystem: "rust:cargo"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+      day: "sunday"
+      time: "12:00"
     reviewers:
       - "maciej-makowski"
