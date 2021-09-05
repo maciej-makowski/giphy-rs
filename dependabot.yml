@@ -1,0 +1,9 @@
+version: 1
+updates:
+  # Enable version updates for npm
+  - package-ecosystem: "rust:cargo"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    reviewers:
+      - "maciej-makowski"
