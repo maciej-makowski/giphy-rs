@@ -3,7 +3,7 @@ name: dependabot-auto-merge
 on:
   pull_request:
     branches:
-      - master
+      - "dependabot/*"
 
 jobs:
   auto-merge:
