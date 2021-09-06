@@ -5,7 +5,7 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-      day: "sunday"
-      time: "12:00"
+      day: "monday"
+      time: "21:00"
     reviewers:
       - "maciej-makowski"
