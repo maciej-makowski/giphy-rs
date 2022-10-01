@@ -17,7 +17,8 @@ the response model is complete. If you run into an JSON deserialization error, p
 the object ID / request params and I will patch the response model.
 
 ## Features
-
+By default both `sync` and `async` API dependencies are included with the library. If you do not
+need and `async` support, you can reduce the dependency size and build time by only loading `feature = ["sync"]`.
 
 ## Usage and examples
 See [Crate documentation] and [examples]
