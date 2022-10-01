@@ -101,7 +101,9 @@
 //! [examples]: https://github.com/cfiet/giphy-rs/tree/master/examples
 //! [`tokio`]: ../tokio/index.html
 
+#[cfg(feature = "async")]
 extern crate futures;
+
 extern crate reqwest;
 #[macro_use]
 extern crate serde_derive;

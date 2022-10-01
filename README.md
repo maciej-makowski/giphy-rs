@@ -5,18 +5,19 @@
 
 This library provides Rust wrapper for [Giphy HTTP API]
 
-## Features
-
+## API Features
 Version `0.4.0` is feature complete and allows to search and retrieve GIFs from [Giphy] both in
 synchronous and asynchronous style. See [Crate documentation] and examples for details.
 Stickers API and posting GIFs is currently not supported. 
 
-This library is still under development and the API is subject to change. Since [Giphy] does not specify the 
-parts of GIF object that are optional, there is potentially still an issue with response object model,
-where actual objects returned by API may not be possible to deserialize into Rust. I am making an
-active effort to integration-test the library an make sure that the response model is complete,
-but if you run into an JSON deserialization error, create an issue with the object ID / request params
-and I will patch the response model.
+This library is still under development and the API is subject to change. Since [Giphy] does not specify
+optional parts of GIF object, there might still be an issue with response model where objects returned by
+API may not be deserialised. I am making an active effort to integration-test the library to make sure
+the response model is complete. If you run into an JSON deserialization error, please create an issue with
+the object ID / request params and I will patch the response model.
+
+## Features
+
 
 ## Usage and examples
 See [Crate documentation] and [examples]

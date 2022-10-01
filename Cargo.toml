@@ -10,11 +10,16 @@ keywords = ["giphy", "gif", "api", "rest", "http"]
 categories = ["api-bindings"]
 readme = "README.md"
 
+[features]
+sync = []
+async = ["dep:futures"]
+default = ["sync", "async"]
+
 [badges]
 travis-ci = { repository = "maciej-makowski/giphy-rs", branch = "master" }
 
 [dependencies]
-futures = "0.3.*"
+futures = { version = "0.3.*", optional = true }
 reqwest = { version = "0.11.*", features = ["blocking", "json"] }
 serde_derive = "1.0.*"
 serde = "1.0.*"
